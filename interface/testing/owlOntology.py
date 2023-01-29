@@ -7,6 +7,7 @@ from script_networkx import remove_namespace
 from owlready2 import *
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 
+
 class owlOntology:
 
     def __init__(self,filename):
@@ -16,13 +17,17 @@ class owlOntology:
         self.nodeArray = None
         self.concernArray = None
         self.propertyArray = None
+        self.clauseArray = None
         self.numNodes = None
         self.numAspects = None
         self.numConcerns = None
         self.numProperties = None
+        self.numClauses = None
         self.numComponents = None
         self.numConditions = None
         self.numImpactRules = None
+        
+        self.allConcerns_owlNode = None
 
 
 
@@ -31,14 +36,19 @@ class owlOntology:
 
         self.aspectConcernArray = None
         self.propertyArray = None
+        self.clauseArray = None
         self.subconcernEdges = None
         self.propertyEdges = None
+        self.clauseEdges = None
 
         self.concernEdgeLabels = None
         self.propertyEdgeLabels = None
+        self.clauseEdgeLabels = None
 
+        self.aspectNodeLabels = None
         self.concernNodeLabels = None
         self.propertyNodeLabels = None
+        self.clauseNodeLabels = None
 
 
         self.minX = None
@@ -56,9 +66,17 @@ class owlOntology:
 
         self.loadOwlFile(filename)
 
-        self.constructIndividualArray()
+        
 
-        self.setNumbers()
+        #self.setNumbers()
+        
+    def initializeOwlNodes(self):
+        
+        self.addOwlNodes()
+        self.assignChildren()
+        self.assignParentsFromChildren()
+        
+        
 
 
     def makeGraph(self):
@@ -74,27 +92,38 @@ class owlOntology:
         self.addNodeLabels()
 
         self.setPositions()
-
-
-
+    
+    def checkAddedToArray(self,name):
+        
+        
+        for node in self.allConcerns_owlNode:
+            
+            if(node.name == name):
+                return True
+            
+        return False
 
 
     def addGraphNodes(self):
 
         self.aspectConcernArray = np.array(())
         self.propertyArray = np.array(())
+        self.clauseArray = np.array(())
 
-        for node in self.nodeArray:
+        for node in self.allConcerns_owlNode:
             #print(str(node.name) + " in add_nodes")
             self.owlGraph.add_node(node.name)
 
             if(str(node.type) == "Concern" or str(node.type) == "Aspect"):
-                print("found concern or aspect")
-                print(node.type)
-                self.aspectConcernArray = np.append(self.aspectConcernArray,node.name)
+                #print("found concern or aspect")
+                #print(node.type)
+                self.aspectConcernArray = np.append(self.aspectConcernArray,node)
             elif(str(node.type) == "Property"):
-                print("found property")
-                self.propertyArray = np.append(self.propertyArray,node.name)
+                #print("found property")
+                self.propertyArray = np.append(self.propertyArray,node)
+            elif(str(node.type) == "Clause"):
+                #print("found property")
+                self.clauseArray = np.append(self.clauseArray,node)
             else:
                 print("couldnt find type")
                 print(node.type)
@@ -107,9 +136,10 @@ class owlOntology:
 
         self.subconcernEdges = []
         self.propertyEdges = []
+        self.clauseEdges = []
 
 
-        for node in self.nodeArray:
+        for node in self.allConcerns_owlNode:
 
             if len(node.children) == 0:
                 continue
@@ -118,7 +148,7 @@ class owlOntology:
             for child in node.children:
 
                 #print(str(child) + " in edges")
-                child = self.findNode(child)
+                
                 if(child.type == "Concern"):
                     self.owlGraph.add_edge(node.name,child.name,length = 1)
                     self.subconcernEdges.append((node.name,child.name))
@@ -130,10 +160,17 @@ class owlOntology:
                     self.propertyEdges.append((node.name,child.name))
 
 
+                if(child.type == "Clause"):
+
+                    self.owlGraph.add_edge(node.name,child.name,length = 1)
+                    self.clauseEdges.append((node.name,child.name))
+
+
     def addEdgeLabels(self):
 
         self.concernEdgeLabels = {}
         self.propertyEdgeLabels = {}
+        self.clauseEdgeLabels = {}
 
         for edge in self.subconcernEdges:
             self.concernEdgeLabels[edge] = 'subconcern'
@@ -141,17 +178,31 @@ class owlOntology:
         for edge in self.propertyEdges:
             self.propertyEdgeLabels[edge] = 'addresses concern'
 
+        for edge in self.clauseEdges:
+            self.clauseEdgeLabels[edge] = 'addresses property'
+
     def addNodeLabels(self):
 
+        self.aspectNodeLabels = {}
         self.concernNodeLabels = {}
         self.propertyNodeLabels = {}
+        self.clauseNodeLabels = {}
 
 
-        for concern in self.aspectConcernArray:
-            self.concernNodeLabels[concern] = concern
+        for node in self.aspectConcernArray:
+            
+           
+            
+            if(node.type == "Aspect"):
+                self.aspectNodeLabels[node.name] = node.name
+            else:
+                self.concernNodeLabels[node.name] = node.name
 
         for myproperty in self.propertyArray:
             self.propertyNodeLabels[myproperty] = myproperty
+
+        for myclause in self.clauseArray:
+            self.clauseNodeLabels[myclause] = myclause
 
     def setPositions(self):
 
@@ -214,8 +265,10 @@ class owlOntology:
     def draw_graph(self, ax,fs):
 
         ax.axis('off')
+        aspect_color = "#000a7d"
         concern_color = "#800000"
         property_color = "#595858"
+        clause_color = "#ffffff"
         edge_color = "black"
         edge_width = 2
         edge_alpha = .8
@@ -226,15 +279,17 @@ class owlOntology:
 
         nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.subconcernEdges, arrows=False,style = "solid",width = edge_width,edge_color = edge_color,alpha = edge_alpha)
         nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.propertyEdges, arrows=False,style = "dashed",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
+        nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.clauseEdges, arrows=True,style = "dashed",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
 
 
         nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.concernEdgeLabels,font_size = fs)
         nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.propertyEdgeLabels,font_size = fs)
+        nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.clauseEdgeLabels,font_size = fs)
 
-        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.concernNodeLabels,font_size=fs*2,bbox=dict(facecolor=concern_color, boxstyle='square,pad=.3'),font_color = "white")
-
-
-        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.propertyNodeLabels,font_size=fs*2,bbox=dict(facecolor=property_color, boxstyle='round4,pad=.3'),font_color = "white")
+        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.aspectNodeLabels,font_size=fs,bbox=dict(facecolor=aspect_color, boxstyle='square,pad=.3'),font_color = "white")
+        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.concernNodeLabels,font_size=fs,bbox=dict(facecolor=concern_color, boxstyle='square,pad=.3'),font_color = "white")
+        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.propertyNodeLabels,font_size=fs,bbox=dict(facecolor=property_color, boxstyle='round4,pad=.3'),font_color = "white")
+        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.clauseNodeLabels,font_size=fs,bbox=dict(facecolor=clause_color, boxstyle='round4,pad=.3'),font_color = "white")
 
 
 
@@ -242,18 +297,19 @@ class owlOntology:
 
     def loadOwlFile(self,filename):
 
-        self.owlReadyOntology = get_ontology("file://./../../src/asklab/querypicker/QUERIES/BASE/" + filename).load()
+        #self.owlReadyOntology = get_ontology("file://./../../src/asklab/querypicker/QUERIES/BASE/" + filename).load()
+        self.owlReadyOntology = get_ontology("file://./" + filename).load()
         self.owlName = str(filename)
 
-    def constructIndividualArray(self):
+    def constructIndividualArrayx(self):
 
         self.owlIndividualArray = np.array(())
         self.nodeArray = np.array(())
 
-        #all_aspects = np.asarray(self.owlReadyOntology.search(type = self.owlReadyOntology.Aspect))
+        all_aspects = np.asarray(self.owlReadyOntology.search(type = self.owlReadyOntology.Aspect))
 
 
-        all_aspects = np.asarray(self.owlReadyOntology.search(iri = "*" + "Trustworthiness"))
+        #all_aspects = np.asarray(self.owlReadyOntology.search(iri = "*" + "Trustworthiness"))
         #all_aspects = np.array((self.owlReadyOntology.Trustworthiness))
 
         for aspect in all_aspects:
@@ -261,11 +317,12 @@ class owlOntology:
 
            self.addAllConcernsFromParent(aspect,"None",0)
 
-        self.addAllProperties()
+        self.addDanglingParentConcerns()
+       # self.addAllProperties()
 
 
 
-    def addAllConcernsFromParent(self,concern,parent,level):
+    def addAllConcernsFromParentx(self,concern,parent,level):
 
         #print("called")
 
@@ -279,6 +336,9 @@ class owlOntology:
         newOwlNode.children = np.array(())
         newOwlNode.level = level
 
+        
+
+    
         for child in concern.includesConcern:
 
             newOwlNode.children = np.append(newOwlNode.children,remove_namespace(child))
@@ -296,18 +356,54 @@ class owlOntology:
         for subconcern in concern.includesConcern:
 
             self.addAllConcernsFromParent(subconcern,concern,level)
+        
+    
+    
+    def addDanglingParentConcerns(self):
+        
+        all_concerns = np.asarray(self.owlReadyOntology.search(type = self.owlReadyOntology.Concern))
+        
+        
+        #print("ALL CONCERNS IN DANGLING PARENT")
+        #print(all_concerns)
+        
+        for concern in all_concerns:
+            print("concern in loop is " + remove_namespace(concern))
+            
+            if(self.checkAddedToArray(remove_namespace(concern)) == False):
+                
+                #print("adding dangling parent = " + remove_namespace(concern))
+                
+                self.owlIndividualArray = np.append(self.owlIndividualArray,concern)
+                
+                newOwlNode = owlNode()
+                newOwlNode.name = remove_namespace(concern)
+                newOwlNode.type = remove_namespace(concern.is_a[0])
+                newOwlNode.children = np.array(())
+                newOwlNode.parent = "None"
+                
+                for child in concern.includesConcern:
+
+                    newOwlNode.children = np.append(newOwlNode.children,remove_namespace(child))
+                
+                self.nodeArray = np.append(self.nodeArray,newOwlNode)
+                
+                
+                
+                
+        
 
     def addAllProperties(self):
 
-        print("called add all properties/n/n/n/n")
-        print("")
-        print("")
+        #print("called add all properties/n/n/n/n")
+        #print("")
+        #print("")
 
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
+        #print("")
+        #print("")
+        #print("")
+        #print("")
+        #print("")
 
 
 
@@ -323,8 +419,8 @@ class owlOntology:
                 continue
             prop = ir.hasCondition[0].conditionProperty[0]
 
-            if(remove_namespace(prop) == "Input1ConsistentReadingFreq" or remove_namespace(prop) == "Input1Modes"):
-                continue
+            #if(remove_namespace(prop) == "Input1ConsistentReadingFreq" or remove_namespace(prop) == "Input1Modes"):
+            #    continue
             self.owlIndividualArray = np.append(self.owlIndividualArray,prop)
 
 
@@ -338,47 +434,40 @@ class owlOntology:
 
 
             #need to add property as child of concern
+            if(len(ir.addressesConcern) == 0):
+                print("IR doesn't address anything")
+                continue
             newOwlNode.parent = str(remove_namespace(ir.addressesConcern[0]))
 
             parentNode = self.findNode(newOwlNode.parent)
 
             parentNode.children = np.append(parentNode.children, newOwlNode.name)
 
+            print(newOwlNode.name)
             newOwlNode.level = self.findNode(newOwlNode.parent).level + 1
 
             self.nodeArray = np.append(self.nodeArray,newOwlNode)
 
 
 
-    def constructOwlNodes(self):
-
-        #self.nodeArray = np.array(())
-
-        for indiv in self.owlIndividualArray:
-
-            newOwlNode = owlNode()
-            newOwlNode.name = remove_namespace(indiv)
-            newOwlNode.type = remove_namespace(indiv.is_a[0])
-
-            self.nodeArray = np.append(self.nodeArray,newOwlNode)
-
     def setNumbers(self):
 
-        print("called set numbers")
+        #print("called set numbers")
         self.numAspects =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Aspect))
         self.numConcerns =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Concern))
         self.numProperties =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Property))
-        self.numNodes = self.numAspects + self.numConcerns + self.numProperties
+        self.numClauses =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Clause))
+        self.numNodes = self.numAspects + self.numConcerns + self.numProperties + self.numClauses
 
         self.numComponents = 0
         self.numConditions = len(self.owlReadyOntology.search(type = self.owlReadyOntology.Condition))
         self.numImpactRules =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.ImpactRule))
 
-        self.printNumbers()
+        #self.printNumbers()
 
     def findNode(self,name):
 
-        for node in self.nodeArray:
+        for node in self.allConcerns_owlNode:
 
             if(node.name == name):
 
@@ -387,6 +476,93 @@ class owlOntology:
         print("couldn't find " + str(name))
         return 0
 
+    def addOwlNodes(self):
+        
+        self.allConcerns_owlNode = []
+        all_concerns = np.asarray(self.owlReadyOntology.search(type = self.owlReadyOntology.Concern))
+        
+        for concern in all_concerns:
+            
+            newOwlNode = owlNode()
+            newOwlNode.name = remove_namespace(concern)
+            newOwlNode.type = remove_namespace(concern.is_a[0])
+            newOwlNode.children = []
+            newOwlNode.parents = []
+            newOwlNode.owlreadyObj = concern
+            
+            self.allConcerns_owlNode.append(newOwlNode)
+            
+    def assignChildren(self):
+        
+        for node in self.allConcerns_owlNode:
+            
+            children_list = node.owlreadyObj.includesConcern
+            
+            for child in children_list:
+                
+                node.children.append(self.getOwlNode(remove_namespace(child)))
+            
+    def assignParentsFromChildren(self):
+        
+        for node in self.allConcerns_owlNode:
+            
+            for child in node.children:
+                
+                child.parents.append(node)
+            
+            
+            
+            
+    def getOwlNode(self,name):
+        
+        for node in self.allConcerns_owlNode:
+            
+            if(node.name == name):
+                
+                return node
+        
+        return 0
+        
+            
+            
+
+    def removeRelationless(self):
+        
+        for node in self.nodeArray:
+            
+            #print(node.name + " in removeEdgeless")
+            #print(node.parent == "None")
+            #print(len(node.children) == 0)
+            #print(node.type != "Aspect")
+    
+            #print()            
+            
+            if(node.parent == "None" and len(node.children) == 0 and node.type != "Aspect"):
+                
+                print("trying to remove " + node.name)
+                to_remove = self.owlReadyOntology.ontology.search(iri = "*" + node.name)
+        
+                names = []
+        
+                for subc in to_remove:
+                    names.append(remove_namespace(subc))
+        
+                i = 0
+        
+                while i < len(names):
+        
+                    if(names[i] == node.name):
+                        break
+        
+                    i = i + 1
+                to_remove = to_remove[i]
+                
+                destroy_entity(to_remove)
+            
+    #def getRelationlessChildren(self,parent):
+        
+        
+        
 
     def printNumbers(self):
 
@@ -396,20 +572,34 @@ class owlOntology:
         print("numAspects = " + str(self.numAspects))
         print("numConcerns = " + str(self.numConcerns))
         print("numProperties = " + str(self.numProperties))
+        print("numClauses = " + str(self.numClauses))
         print("numComponents = " + str(self.numComponents))
         print("numImpactRules = " + str(self.numImpactRules))
         print("numConditions = " + str(self.numConditions))
+        
+def is_asp_or_conc(mytype):
+    
+    if(not (mytype == "Concern" or mytype == "Aspect") ):
+        return False
+    else:
+        return True
 
 
 
 
 
 
-#testOwlOntology = owlOntology("cpsframework-v3-base.owl")
+testOwlOntology = owlOntology("cpsframework-v3-base.owl")
 
-#for node in testOwlOntology.nodeArray:
-#    print(node.name)
+testOwlOntology.initializeOwlNodes()
 
+for node in testOwlOntology.allConcerns_owlNode:
+    
+    print(node.name)
+    for parent in node.parents:
+        print(parent.name)
+    
+    print()
 #print("done\n\n")
 
 #    print(node.name + " " + node.type + " parent = " + node.parent + " children = " + str(node.children) + " level = " + str(node.level))

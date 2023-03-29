@@ -30,6 +30,7 @@ input("cpsf:conditionProperty","rdf:type","owl:ObjectProperty").
 input("cpsf:RealizationFacet","rdfs:comment","CPS-independent").
 input("cpsf:RealizationFacet","rdf:type","cpsf:Facet").
 input("cpsf:RealizationFacet","rdf:type","owl:NamedIndividual").
+input("cpsf:Sign_In_Func","rdf:type","owl:NamedIndividual").
 input("cpsf:Communication","rdf:type","cpsf:Concern").
 input("cpsf:Communication","rdf:type","owl:NamedIndividual").
 input("cpsf:OperationsOnData","cpsf:includesConcern","cpsf:Transformation").
@@ -57,11 +58,24 @@ input("cpsf:Environment","rdf:type","owl:NamedIndividual").
 input("cpsf:refinedInto","rdfs:range","cpsf:Function").
 input("cpsf:refinedInto","rdfs:domain","cpsf:Function").
 input("cpsf:refinedInto","rdf:type","owl:ObjectProperty").
+input("cpsf:memberOf","rdfs:range","cpsf:Formulas").
+input("cpsf:memberOf","rdfs:domain","cpsf:Property").
+input("cpsf:memberOf","rdf:type","owl:ObjectProperty").
+input("cpsf:Energy_Func","rdf:type","owl:NamedIndividual").
 input("cpsf:Integrity","cpsf:relevantToFunc","cpsf:bc1").
 input("cpsf:Integrity","rdf:type","cpsf:Concern").
 input("cpsf:Integrity","rdf:type","owl:NamedIndividual").
 input("cpsf:Measurability","rdf:type","cpsf:Concern").
 input("cpsf:Measurability","rdf:type","owl:NamedIndividual").
+input("cpsf:g7","cpsf:addressToFunc","cpsf:Operation_Func").
+input("cpsf:g7","rdf:type","owl:NamedIndividual").
+input("cpsf:g7","rdf:type","cpsf:Formulas").
+input("cpsf:Acceptable_Shipping_Cost","cpsf:atomicStatement","acceptable_shipping_cost").
+input("cpsf:Acceptable_Shipping_Cost","cpsf:memberOf","cpsf:g6").
+input("cpsf:Acceptable_Shipping_Cost","cpsf:addConcern","cpsf:Cost").
+input("cpsf:Acceptable_Shipping_Cost","rdf:type","owl:NamedIndividual").
+input("cpsf:Acceptable_Shipping_Cost","rdf:type","cpsf:Property").
+input("cpsf:Encryption","rdf:type","owl:NamedIndividual").
 input("cpsf:Discoverability","rdf:type","cpsf:Concern").
 input("cpsf:Discoverability","rdf:type","owl:NamedIndividual").
 input("cpsf:Function","rdfs:subClassOf","cpsf:CPSFrameworkConcept").
@@ -69,16 +83,30 @@ input("cpsf:Function","rdf:type","owl:Class").
 input("cpsf:addressesPolarity","rdfs:range","cpsf:ImpactPolarity").
 input("cpsf:addressesPolarity","rdfs:domain","cpsf:ImpactRule").
 input("cpsf:addressesPolarity","rdf:type","owl:ObjectProperty").
+input("cpsf:addProperty","rdfs:range","cpsf:Property").
+input("cpsf:addProperty","rdfs:domain","cpsf:Clause").
+input("cpsf:addProperty","rdf:type","owl:ObjectProperty").
 input("cpsf:SAMEncryptedMem","rdfs:comment","SAM uses encrypted memory").
 input("cpsf:SAMEncryptedMem","cpsf:atomicStatement","encrypted_mem_sam").
 input("cpsf:SAMEncryptedMem","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:SAMEncryptedMem","rdf:type","cpsf:Property").
 input("cpsf:SAMEncryptedMem","rdf:type","owl:NamedIndividual").
-input("cpsf:Input1SecBoot","rdfs:comment","The camera uses secure boot").
+input("cpsf:Material_Safe_For_Building","cpsf:atomicStatement","material_safe_for_building").
+input("cpsf:Material_Safe_For_Building","cpsf:memberOf","cpsf:g6").
+input("cpsf:Material_Safe_For_Building","cpsf:addConcern","cpsf:Reliability").
+input("cpsf:Material_Safe_For_Building","cpsf:addConcern","cpsf:Safety").
+input("cpsf:Material_Safe_For_Building","rdf:type","owl:NamedIndividual").
+input("cpsf:Material_Safe_For_Building","rdf:type","cpsf:Property").
+input("cpsf:Component_Property","rdf:type","owl:Class").
 input("cpsf:Input1SecBoot","cpsf:atomicStatement","sec_boot_input1").
 input("cpsf:Input1SecBoot","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:Input1SecBoot","rdf:type","cpsf:Property").
 input("cpsf:Input1SecBoot","rdf:type","owl:NamedIndividual").
+input("cpsf:C2","cpsf:addProperty","cpsf:Material_Sufficiently_Durable").
+input("cpsf:C2","cpsf:addProperty","cpsf:Material_Safe_For_Building").
+input("cpsf:C2","rdf:type","owl:NamedIndividual").
+input("cpsf:C2","rdf:type","cpsf:Clause").
+input("cpsf:Formulas","rdf:type","owl:Class").
 input("cpsf:positive","rdf:type","cpsf:ImpactPolarity").
 input("cpsf:positive","rdf:type","owl:NamedIndividual").
 input("cpsf:DeviceIdentification","rdf:type","cpsf:Concern").
@@ -112,6 +140,9 @@ input("cpsf:c0002_01","cpsf:conditionProperty","cpsf:Input1SecBoot").
 input("cpsf:c0002_01","cpsf:conditionPolarity","cpsf:positive").
 input("cpsf:c0002_01","rdf:type","cpsf:Condition").
 input("cpsf:c0002_01","rdf:type","owl:NamedIndividual").
+input("cpsf:g2","cpsf:addressToFunc","cpsf:Sign_In_Func").
+input("cpsf:g2","rdf:type","owl:NamedIndividual").
+input("cpsf:g2","rdf:type","cpsf:Formulas").
 input("cpsf:Reliability","rdf:type","cpsf:Concern").
 input("cpsf:Reliability","rdf:type","owl:NamedIndividual").
 input("cpsf:Artifact","rdfs:subClassOf","cpsf:CPSFrameworkConcept").
@@ -120,6 +151,9 @@ input("cpsf:hasBC","rdfs:range","cpsf:BusinessCase").
 input("cpsf:hasBC","rdfs:domain","cpsf:Application").
 input("cpsf:hasBC","rdfs:subPropertyOf","owl:topObjectProperty").
 input("cpsf:hasBC","rdf:type","owl:ObjectProperty").
+input("cpsf:g10","cpsf:addressToFunc","cpsf:Energy_Func").
+input("cpsf:g10","rdf:type","owl:NamedIndividual").
+input("cpsf:g10","rdf:type","cpsf:Formulas").
 input("cpsf:BusinessCase","cpsf:nextFC","cpsf:UseCase").
 input("cpsf:BusinessCase","rdf:type","cpsf:BusinessCase").
 input("cpsf:BusinessCase","rdf:type","owl:NamedIndividual").
@@ -142,6 +176,9 @@ input("cpsf:Actuation","rdf:type","owl:NamedIndividual").
 input("cpsf:Confidentiality","cpsf:relevantToFunc","cpsf:bc1").
 input("cpsf:Confidentiality","rdf:type","cpsf:Concern").
 input("cpsf:Confidentiality","rdf:type","owl:NamedIndividual").
+input("cpsf:relateToProperty","rdfs:range","cpsf:Property").
+input("cpsf:relateToProperty","rdfs:domain","cpsf:Component").
+input("cpsf:relateToProperty","rdf:type","owl:ObjectProperty").
 input("cpsf:uc1","rdf:type","cpsf:UseCase").
 input("cpsf:uc1","rdf:type","owl:NamedIndividual").
 input("cpsf:ManagingTimingAndLatency","rdf:type","cpsf:Concern").
@@ -167,6 +204,9 @@ input("cpsf:StatesAndModes","rdf:type","cpsf:Concern").
 input("cpsf:StatesAndModes","rdf:type","owl:NamedIndividual").
 input("cpsf:Aggregation_Disaggregation","rdf:type","cpsf:Concern").
 input("cpsf:Aggregation_Disaggregation","rdf:type","owl:NamedIndividual").
+input("cpsf:g5","cpsf:addressToFunc","cpsf:Sign_In_Func").
+input("cpsf:g5","rdf:type","owl:NamedIndividual").
+input("cpsf:g5","rdf:type","cpsf:Formulas").
 input("cpsf:Test","rdfs:subClassOf","cpsf:Property").
 input("cpsf:Test","rdf:type","owl:Class").
 input("cpsf:Scenario","rdf:type","cpsf:Scenario").
@@ -206,6 +246,9 @@ input("cpsf:Resilience","rdf:type","owl:NamedIndividual").
 input("cpsf:Functionality","cpsf:relevantToFunc","cpsf:bc1").
 input("cpsf:Functionality","rdf:type","cpsf:Concern").
 input("cpsf:Functionality","rdf:type","owl:NamedIndividual").
+input("cpsf:g8","cpsf:addressToFunc","cpsf:Energy_Func").
+input("cpsf:g8","rdf:type","owl:NamedIndividual").
+input("cpsf:g8","rdf:type","cpsf:Formulas").
 input("cpsf:Timing","cpsf:includesConcern","cpsf:TimeIntervalAndLatencyControl").
 input("cpsf:Timing","cpsf:includesConcern","cpsf:TimeAwareness").
 input("cpsf:Timing","cpsf:includesConcern","cpsf:Synchronization").
@@ -234,6 +277,12 @@ input("cpsf:PropertyType","rdfs:subClassOf","cpsf:CPSFrameworkConcept").
 input("cpsf:PropertyType","rdf:type","owl:Class").
 input("cpsf:LocationOfData","rdf:type","cpsf:Concern").
 input("cpsf:LocationOfData","rdf:type","owl:NamedIndividual").
+input("cpsf:C3","cpsf:addProperty","cpsf:Acceptable_Shipping_Cost").
+input("cpsf:C3","rdf:type","owl:NamedIndividual").
+input("cpsf:C3","rdf:type","cpsf:Clause").
+input("cpsf:positiveImpactTo","rdfs:range","cpsf:Concern").
+input("cpsf:positiveImpactTo","rdfs:domain","cpsf:Component_Property").
+input("cpsf:positiveImpactTo","rdf:type","owl:ObjectProperty").
 input("cpsf:Application","rdfs:subClassOf","cpsf:CPSFrameworkConcept").
 input("cpsf:Application","rdf:type","owl:Class").
 input("cpsf:ir0006","rdfs:comment","cpsf:Confidentiality is addressed by property cpsf:Input1EncryptedMem").
@@ -259,12 +308,20 @@ input("cpsf:ResourceIdentification","rdf:type","cpsf:Concern").
 input("cpsf:ResourceIdentification","rdf:type","owl:NamedIndividual").
 input("cpsf:Polymorphism","rdf:type","cpsf:Concern").
 input("cpsf:Polymorphism","rdf:type","owl:NamedIndividual").
+input("cpsf:Material_Sufficiently_Durable","cpsf:atomicStatement","material_sufficiently_durable").
+input("cpsf:Material_Sufficiently_Durable","cpsf:memberOf","cpsf:g6").
+input("cpsf:Material_Sufficiently_Durable","cpsf:addConcern","cpsf:Performance").
+input("cpsf:Material_Sufficiently_Durable","rdf:type","owl:NamedIndividual").
+input("cpsf:Material_Sufficiently_Durable","rdf:type","cpsf:Property").
 input("cpsf:app1","cpsf:hasBC","cpsf:bc1").
 input("cpsf:app1","rdf:type","cpsf:Application").
 input("cpsf:app1","rdf:type","owl:NamedIndividual").
+input("cpsf:g3","cpsf:addressToFunc","cpsf:Sign_In_Func").
+input("cpsf:g3","rdf:type","owl:NamedIndividual").
+input("cpsf:g3","rdf:type","cpsf:Formulas").
+input("cpsf:Clause","rdf:type","owl:Class").
 input("cpsf:TimeToMarket","rdf:type","cpsf:Concern").
 input("cpsf:TimeToMarket","rdf:type","owl:NamedIndividual").
-input("cpsf:Input1EncryptedMem","rdfs:comment","The camera uses encrypted memory").
 input("cpsf:Input1EncryptedMem","cpsf:atomicStatement","encrypted_mem_input1").
 input("cpsf:Input1EncryptedMem","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:Input1EncryptedMem","rdf:type","cpsf:Property").
@@ -372,15 +429,23 @@ input("cpsf:Fusion","rdf:type","cpsf:Concern").
 input("cpsf:Fusion","rdf:type","owl:NamedIndividual").
 input("cpsf:PhysicalContext","rdf:type","cpsf:Concern").
 input("cpsf:PhysicalContext","rdf:type","owl:NamedIndividual").
+input("cpsf:Promptly_Send_Payment","cpsf:atomicStatement","promptly_send_payment").
+input("cpsf:Promptly_Send_Payment","cpsf:memberOf","cpsf:g6").
+input("cpsf:Promptly_Send_Payment","cpsf:addConcern","cpsf:Policy").
+input("cpsf:Promptly_Send_Payment","rdf:type","owl:NamedIndividual").
+input("cpsf:Promptly_Send_Payment","rdf:type","cpsf:Property").
 input("cpsf:Authorization","rdf:type","cpsf:Concern").
 input("cpsf:Authorization","rdf:type","owl:NamedIndividual").
-input("cpsf:Input1Modes","rdfs:comment","The camera should be capable of recording at 25fps and at 50fps").
+input("cpsf:g6","cpsf:addressToFunc","cpsf:Operation_Func").
+input("cpsf:g6","rdf:type","owl:NamedIndividual").
+input("cpsf:g6","rdf:type","cpsf:Formulas").
 input("cpsf:Input1Modes","cpsf:atomicStatement","slow_mode_input1").
 input("cpsf:Input1Modes","cpsf:hasType","cpsf:PropertyType_Capability").
 input("cpsf:Input1Modes","rdf:type","cpsf:Property").
 input("cpsf:Input1Modes","rdf:type","owl:NamedIndividual").
 input("cpsf:Availability","rdf:type","cpsf:Concern").
 input("cpsf:Availability","rdf:type","owl:NamedIndividual").
+input("cpsf:Component","rdf:type","owl:Class").
 input("cpsf:ClassIdentification","rdf:type","cpsf:Concern").
 input("cpsf:ClassIdentification","rdf:type","owl:NamedIndividual").
 input("cpsf:Judgment","rdfs:subClassOf","cpsf:Property").
@@ -403,10 +468,16 @@ input("cpsf:Cybersecurity","cpsf:includesConcern","cpsf:Confidentiality").
 input("cpsf:Cybersecurity","cpsf:includesConcern","cpsf:Availability").
 input("cpsf:Cybersecurity","rdf:type","cpsf:Concern").
 input("cpsf:Cybersecurity","rdf:type","owl:NamedIndividual").
+input("cpsf:confComponent","rdfs:range","cpsf:Component").
+input("cpsf:confComponent","rdfs:domain","cpsf:Component_Property").
+input("cpsf:confComponent","rdf:type","owl:ObjectProperty").
 input("cpsf:UserIdentification","rdf:type","cpsf:Concern").
 input("cpsf:UserIdentification","rdf:type","owl:NamedIndividual").
 input("cpsf:CPSFrameworkConcept","rdf:type","owl:Class").
-input("cpsf:Input1ConsistentReadingFreq","rdfs:comment","The camera records at constant frame-rate").
+input("cpsf:Operation_Func","rdf:type","owl:NamedIndividual").
+input("cpsf:C1","cpsf:addProperty","cpsf:Sufficient_Material_For_Building").
+input("cpsf:C1","rdf:type","owl:NamedIndividual").
+input("cpsf:C1","rdf:type","cpsf:Clause").
 input("cpsf:Input1ConsistentReadingFreq","cpsf:atomicStatement","consist_reading_freq_input1").
 input("cpsf:Input1ConsistentReadingFreq","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:Input1ConsistentReadingFreq","rdf:type","cpsf:Property").
@@ -440,6 +511,12 @@ input("cpsf:Utility","rdf:type","cpsf:Concern").
 input("cpsf:Utility","rdf:type","owl:NamedIndividual").
 input("cpsf:DirectionalityOfRelationships","rdf:type","cpsf:Concern").
 input("cpsf:DirectionalityOfRelationships","rdf:type","owl:NamedIndividual").
+input("cpsf:g1","cpsf:addressToFunc","cpsf:Sign_In_Func").
+input("cpsf:g1","rdf:type","owl:NamedIndividual").
+input("cpsf:g1","rdf:type","cpsf:Formulas").
+input("cpsf:addressToFunc","rdfs:range","cpsf:DecompositionFunction").
+input("cpsf:addressToFunc","rdfs:domain","cpsf:Formulas").
+input("cpsf:addressToFunc","rdf:type","owl:ObjectProperty").
 input("cpsf:Human","cpsf:includesConcern","cpsf:Usability").
 input("cpsf:Human","cpsf:includesConcern","cpsf:HumanFactors").
 input("cpsf:Human","rdf:type","cpsf:Aspect").
@@ -457,6 +534,9 @@ input("cpsf:c0003_01","rdf:type","cpsf:Condition").
 input("cpsf:c0003_01","rdf:type","owl:NamedIndividual").
 input("cpsf:Responsibility","rdf:type","cpsf:Concern").
 input("cpsf:Responsibility","rdf:type","owl:NamedIndividual").
+input("cpsf:g9","cpsf:addressToFunc","cpsf:Energy_Func").
+input("cpsf:g9","rdf:type","owl:NamedIndividual").
+input("cpsf:g9","rdf:type","cpsf:Formulas").
 input("cpsf:bc1","cpsf:refinedInto","cpsf:uc2").
 input("cpsf:bc1","cpsf:refinedInto","cpsf:uc1").
 input("cpsf:bc1","rdf:type","cpsf:BusinessCase").
@@ -475,6 +555,12 @@ input("cpsf:SAMSecBoot","rdf:type","cpsf:Property").
 input("cpsf:SAMSecBoot","rdf:type","owl:NamedIndividual").
 input("cpsf:Regulatory","rdf:type","cpsf:Concern").
 input("cpsf:Regulatory","rdf:type","owl:NamedIndividual").
+input("cpsf:addConcern","rdfs:range","cpsf:Concern").
+input("cpsf:addConcern","rdfs:domain","cpsf:Property").
+input("cpsf:addConcern","rdf:type","owl:ObjectProperty").
+input("cpsf:C4","cpsf:addProperty","cpsf:Promptly_Send_Payment").
+input("cpsf:C4","rdf:type","owl:NamedIndividual").
+input("cpsf:C4","rdf:type","cpsf:Clause").
 input("cpsf:Aspect","rdfs:comment","pg 15").
 input("cpsf:Aspect","rdfs:comment","all instances are CPS-independent").
 input("cpsf:Aspect","rdfs:subClassOf","cpsf:Concern").
@@ -487,6 +573,10 @@ input("cpsf:nextFC","rdfs:comment","next level of functional decomposition").
 input("cpsf:nextFC","rdfs:range","cpsf:Function").
 input("cpsf:nextFC","rdfs:domain","cpsf:Function").
 input("cpsf:nextFC","rdf:type","owl:ObjectProperty").
+input("cpsf:DecompositionFunction","rdf:type","owl:Class").
+input("cpsf:confProperty","rdfs:range","cpsf:Property").
+input("cpsf:confProperty","rdfs:domain","cpsf:Component_Property").
+input("cpsf:confProperty","rdf:type","owl:ObjectProperty").
 input("cpsf:Adaptability","rdf:type","cpsf:Concern").
 input("cpsf:Adaptability","rdf:type","owl:NamedIndividual").
 input("cpsf:UseCase","cpsf:nextFC","cpsf:Scenario").
@@ -510,6 +600,11 @@ input("cpsf:Data","cpsf:includesConcern","cpsf:Identity").
 input("cpsf:Data","cpsf:includesConcern","cpsf:DataSemantics").
 input("cpsf:Data","rdf:type","cpsf:Aspect").
 input("cpsf:Data","rdf:type","owl:NamedIndividual").
+input("cpsf:Sufficient_Material_For_Building","cpsf:atomicStatement","sufficient_material_for_building").
+input("cpsf:Sufficient_Material_For_Building","cpsf:memberOf","cpsf:g6").
+input("cpsf:Sufficient_Material_For_Building","cpsf:addConcern","cpsf:TimeToMarket").
+input("cpsf:Sufficient_Material_For_Building","rdf:type","owl:NamedIndividual").
+input("cpsf:Sufficient_Material_For_Building","rdf:type","cpsf:Property").
 input("cpsf:DataIntegrity","rdf:type","cpsf:Concern").
 input("cpsf:DataIntegrity","rdf:type","owl:NamedIndividual").
 input("cpsf:Condition","rdfs:subClassOf","cpsf:ImpactRuleConcepts").
@@ -518,6 +613,42 @@ input("cpsf:Constructivity","rdf:type","cpsf:Concern").
 input("cpsf:Constructivity","rdf:type","owl:NamedIndividual").
 input("cpsf:Storage","rdf:type","cpsf:Concern").
 input("cpsf:Storage","rdf:type","owl:NamedIndividual").
+input("cpsf:g4","cpsf:addressToFunc","cpsf:Sign_In_Func").
+input("cpsf:g4","rdf:type","owl:NamedIndividual").
+input("cpsf:g4","rdf:type","cpsf:Formulas").
+#const case=2.
+#const pool=1.
+
+%       -- to be used together with theory*.lp
+%          and with step1-BASE.lp
+
+% Reason optimistically about concerns, concerns default to unsatisfied,
+% but concerns that have no requirements nor sub-concerns are vacuously
+% satisfied.
+%
+% The example shows that, under this reasoning mode, the entire concern
+% tree is satisfied.
+
+% Enable optimistic inference on concern satisfaction
+inference(concerns,optimistic).
+
+% ------ Output Interface ------
+
+output(D,property,"-",S) :- last_step(S), holds(sat(A),S), atomic_statement(P,A), descr(P,D).
+output(C,concern,F,S) :- last_step(S), holds(sat(C,F),S),concern(C),not aspect(C), C!=all.
+output(C,aspect,F,S) :- last_step(S), holds(sat(C,F),S),aspect(C).
+output("concern-tree",tree,F,S) :- last_step(S), holds(sat(all,F),S).
+
+output(C,"concern/aspect (unk)",F,S) :- 
+	inference(concerns,skeptical),
+	last_step(S), concern(C), relevantToFunc(C,F), 
+	not holds(sat(C,F),S),
+	not holds(sat(C,F),S).
+
+output_headings("satisfied concern/aspect/property","type","function","step").
+
+% Display replacement information
+output(replace_quality(Amt,Q),"corrective-measure","-",S) :- last_step(S), replacement(Amt,Q).
 % ======== SIMPLE EXAMPLE 1 ========
 %       -- to be used together with theory*.lp
 %          and with step1-{optimistic,skeptical,pessimistic}.lp
@@ -553,18 +684,11 @@ input("cpsf:Storage","rdf:type","owl:NamedIndividual").
 
 % Properties
 % ---Observations
-obs(sat("encrypted_mem_input1"),true).
-obs(sat("encrypted_mem_sam"),true).
-obs(sat("sec_boot_input1"),true).
-obs(sat("sec_boot_sam"),true).
-obs(sat("slow_mode_input1"),true).
-
-% Extra-framework configuration
-config_feature("using_basic_input1").
-%%%%descr("using_basic_input1","Basic type of input device 1 is in use").
-% the basic type of input device 1 is used, unless we decide otherwise
-%assumed("using_basic_input1",true).
-obs(sat("using_basic_input1"),true).
+%obs(sat("encrypted_mem_input1"),false).
+%obs(sat("encrypted_mem_sam"),false).
+%obs(sat("sec_boot_input1"),false).
+%obs(sat("sec_boot_sam"),false).
+%obs(sat("slow_mode_input1"),false).
 
 step(0).
 
@@ -590,24 +714,6 @@ step(0).
 %	addresses(A,C,F),
 %	holds(sat(A),S).
 
-
-
-% ------ Constraints ------
-
-%   Normally, input device 1 reads inputs with a consistent frequency.
-fluent(sat("consist_reading_freq_input1")).
-defined(neg,sat("consist_reading_freq_input1")).
-%assumed("consist_reading_freq_input1",true).
-
-%   An exception to this general rule is that, when the basic type 
-%   of input 1 device is in use, using encrypted memory and 
-%   fast mode impacts negatively the maintainability of a consistent 
-%   reading frequency"
-impacted(neg,sat("consist_reading_freq_input1"),S) :-
-	step(S),
-	holds(sat("using_basic_input1"),S),
-	holds(sat("encrypted_mem_input1"),S),
-	-holds(sat("slow_mode_input1"),S).
 %%%%% NOTE: to use inference on the satisfaction of concerns,
 %%%%%       one MUST define one of the following facts:
 %%%%%
@@ -1059,247 +1165,258 @@ holds(prob_of_state(P),S2) :-
 	step(S), step(S2), S2=S+1,
 	holds(prob_of_state(P),S),
 	unk_prob_success(S).
-% For use with dlv and probabilistic information
-#maxint=10000.
-% ------ Output Interface ------
+#const maxTime=4. 
 
-descr("using_basic_input1","Basic camera is in use").
-event_descr(recipient_rejects,"recording thrown out of court").
-action_descr(patch(sam),"patch the SAM").
-% ======== SIMPLE EXAMPLE 1 ========
-%       -- to be used together with theory*.lp
-%          and with step1-BASE.lp
-%          (this example uses pessimistic inference)
+step(0..maxTime). 
+
+example(case). 
+
+%%% example 1 
+
+assume(lumber_board(150000,1)) :- example(1).  
+
+%%% example 2
+
+assume(lumber_board(100000,1)) :- example(2). 
+assume(lumber_board(50000,2))   :- example(2).
+
+%%% example 3
+
+assume(lumber_board(100000,1)) :- example(3). 
+%assume(lumber_board(50000,2))   :- example(2).
+
+
+grade(0..3). 
+
+init(board(0,0..2)).
+init(available_fund(200000)). 
+
+%amount(1000).
+amount(5000).
+amount(10000).
+amount(20000).
+amount(30000).
+amount(40000).
+%amount(44000).
+amount(50000).
+amount(100000).
+amount(150000). 
+
+holds(lumber_board(X,Y), 0) :-  assume(lumber_board(X,Y)). 
+holds(lumber_board(0,G), 0)  :-  grade(G), not assume(lumber_board(_,G)). 
+holds(lumber_board(X-Z,Y), T+1) :-  step(T), holds(lumber_board(X,Y), T), observation(delivered(Z,Y),T).
+holds(lumber_board(X,Y), T+1) :-  step(T), holds(lumber_board(X,Y), T), not delivered(Y,T).
+delivered(Y,T) :- observation(delivered(_,Y), T).                                             
+
+{observation(delivered(X,Y), T) : amount(X)} 1 :- step(T), holds(lumber_board(X',Y), T).
+
+:- step(T), delivered(Q,T), Q > 1, holds(lumber_board(X,1), T), X > 0.  
+
+:- step(T), holds(lumber_board(X',Y), T), observation(delivered(X,Y), T), X > X'. 
+
+:- step(T), delivered(Q,T), Q > 1, holds(board(140000,1), T).  
+
+:- step(T), holds(board(X',1), T), observation(delivered(X,Y), T), Y >=1, X+X' >140000. 
+
+% :~ holds(lumber_board(M,G), maxTime+1), N=100000*G. [-N@G, M] 
+
+%#maximize {M : holds(lumber_board(M, G), maxTime+1),grade(G)}. 
+
+%observation(delivered(100000,1), 0).
+%observation(delivered(40000,1), 1).
+
+holds(board(X,Y), 0) :- init(board(X,Y)).
+
+holds(board(X+X',Y), T+1) :- step(T), holds(board(X',Y), T), observation(delivered(X,Y),T).
+holds(board(X,Y), T+1)  :- step(T), holds(board(X,Y), T), not delivered(Y, T).                                                
+
+holds(board_cost(X-B), T) :- step(T), X = #sum {Y *10 : holds(board(Y, Q), T), Q >= 1}, holds(paid(B, board), T).
+
+holds(available_fund(X), 0):- init(available_fund(X)). 
+holds(available_fund(0), 0):- not init(available_fund(_)). 
+
+holds(paid(0, board), 0).
+holds(paid(0, shipping), 0).                                              
+
+{occurs(pay(X, board), T) : amount(X)} 1 :-  step(T),   holds(available_fund(Y), T), Y > 0. 
+
+{occurs(pay(X, shipping), T) : amount(X)} 1 :- step(T),   holds(available_fund(Y), T), Y > 0.  
+
+%occurs(pay(50000,shipping),3).
+%occurs(pay(100000,board),3).
+%occurs(pay(20000,board),2).
+
+:- step(T), holds(available_fund(X'), T), #sum{X,Y : occurs(pay(X, Y), T)} > X'.  
+
+:- step(T), occurs(pay(X, shipping), T), holds(board_cost(0), T).  
+
+:- step(T), occurs(pay(X, shipping), T), holds(paid(Y, shipping), T), Y+X > 50000.  
+
+:- step(T), occurs(pay(X, board), T), holds(board_cost(0), T).  
+
+
+% :- step(T), occurs(pay(X, board), T), holds(board_cost(Y), T), Y<X.  
+
+ab(1):- step(T), Z = #sum{Y, B : occurs(pay(Y, B), T)}, holds(available_fund(X), T), X < Z.  
+
+holds(available_fund(X-Z), T+1) :- step(T), holds(available_fund(X), T), 
+                                                       Z = #sum{Y, B : occurs(pay(Y, B), T)}, X >= Z. 
+
+holds(available_fund(X), T+1) :- step(T), holds(available_fund(X), T), 
+                                                       Z = #sum{Y, B : occurs(pay(Y, B), T)}, X < Z. 
+                                                   
+holds(paid(X+Z, Y), T+1) :- step(T), holds(paid(X, Y), T), occurs(pay(Z, Y), T), not ab(1).                                                      
+
+holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} == 0.                                                       
+
+holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} > 0, ab(1).                                                       
+
+%%
+%%holds(available_fund(X-Y), T+1) :- step(T), holds(available_fund(X), T), Y = #sum{Z, Q : occurs(pay(Z, Q), T)}. 
+%%
+%%holds(available_fund(A), T+1) :- step(T), holds(available_fund(A), T),  #count{X,Y : occurs(pay(X,Y), T)} == 0. 
+%%                                                   
+%%holds(paid(X+Z, Y), T+1) :- step(T), holds(paid(X, Y), T), occurs(pay(Z, Y), T).                                                      
+%%
+%%holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} == 0.                                                     
+                                               
+% C1: L  responsible_for    board(144K, Q) , 1 <= Q  when  by_week 4    
+% C2: L  responsible_for    delivered(144K, Q) , 1 <= Q  when  by_week 4  
+% C3: H  responsible_for    payment(122K, board)  when  by_week 4    
+% C4: H  responsible_for    exists(X), X >= 50K, payment(X, shipping)  when  by_week 4   
+
+clause(c1, lumber, phi_1, by(4)). 
+clause(c2, lumber, phi_2, by(4)). 
+clause(c3, homes, phi_3, by(4)). 
+clause(c4, homes, phi_4, by(4)).  
+
+%%% condition whether clause 1 is satisfied 
+
+holds(phi_1, T) :- step(T), #sum{X,Q,T' : observation(delivered(X, Q), T'), Q>=1, T>=T'} >= 140000.  
+
+%%% condition whether clause 2 is satisfied 
+
+holds(phi_2, T) :- step(T), holds(board(140000, 1), T).  
+
+replacement(X,Q) :- 
+	step(T), not holds(board(140000, 1), T), 
+	holds(board(X,Q), T), Q>1,X>0,  
+	#sum{X1,Q1 : holds(board(X1, Q1), T), Q1>=1} >= 140000.  
+
+holds(phi_2, T) :-  step(T), not holds(board(140000, 1), T), 
+	#sum{X,Q : holds(board(X, Q), T), Q>=1} >= 140000.  
+
+
+%%% paying the full contract 
+
+holds(phi_3, T) :- step(T), holds(paid(120000, board), T).  
+
+%%% paying as needed 
+
+holds(phi_3, T) :- step(T), holds(board_cost(0), T). 
+
+%%% paying the full contract for shipping 
+
+holds(phi_4, T) :- step(T), holds(paid(50000, shipping), T).  
+
+%%% satisfaction of clauses 
+
+satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, holds(F, T). 
+
+not_satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, not holds(F, T). 
+%%% 
+%%
+%%not_ok(c1) :- not satisfies(c1,  maxTime). 
+%%not_ok(c2) :- not satisfies(c2, maxTime). 
+%%not_ok(c3) :- not satisfies(c3, maxTime). 
+%%not_ok(c4) :- not satisfies(c4, maxTime). 
+
 %
-% SYSTEM DESCRIPTION
-% Input device 1 can operate in one of slow-mode and fast-mode.
-% The SAM determines the mode of operation of input device 1.
-% Normally, input device 1 reads inputs with a consistent frequency.
-% If the basic type of input device 1 is configured to use
-% encrypted memory and fast-mode, then the device will be
-% unable to maintain a consistent frequency of reading.
-%
-% CONFIGURATION
-% The SAM and input device 1 are configured to use encrypted 
-% memory and secure boot. 
-% The basic type of input device 1 is used.
-% The SAM is configured to set input device 1 to slow-mode.
-%
-% Questions:
-%   1. Is the functionality concern satisfied?
-%   2. Is the functional aspect satisfied?
-%   3. Are all aspects satisfied?
-% 
-% Answers:
-%   1. Yes
-%   2. Yes (because all concerns and sub-concerns of functional aspect are satisfied)
-%   3. Yes (because all aspects are satisfied)
+%ok(c1) :- satisfies(c1,  maxTime). 
+%ok(c2) :- satisfies(c2, maxTime). 
+%ok(c3) :- satisfies(c3, maxTime). 
+%ok(c4) :- satisfies(c4, maxTime). 
 
-% Enable skeptical inference on concern satisfaction
-inference(concerns,pessimistic).
+ 
+good(N) :- N = #count{C : satisfies(C, maxTime)}.
+ 
+ #maximize {N : good(N)}. 
 
+%%%
 
-% ------ Output Interface ------
+%#maximize {Z : holds(available_fund(Z), maxTime+1)}. 
 
-%output(D,property,S) :- last_step(S), -holds(sat_property(A),S), atomic_statement(P,A), descr(P,D).
-%output(C,concern,S) :- last_step(S), -holds(sat_concern(C),S),-aspect(C).
-%output(C,aspect,S) :- last_step(S), -holds(sat_concern(C),S),aspect(C).
-%output("concern-tree",tree,S) :- last_step(S), -holds(sat_all,S).
-%
-%output_headings("unsatisfied concern/aspect/property","type","step").
+%*
+#show.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-output(D,property,"-",S) :- last_step(S), -holds(sat(A),S), atomic_statement(P,A), descr(P,D).
-output(C,concern,F,S) :- last_step(S), -holds(sat(C,F),S),concern(C),not aspect(C), C!=all.
-output(C,aspect,F,S) :- last_step(S), -holds(sat(C,F),S),aspect(C).
-output("concern-tree",tree,F,S) :- last_step(S), -holds(sat(all,F),S).
+% #show holds/2. 
+#show occurs/2. 
+#show observation/2. 
+#show received(board(X,Y), T) : observation(delivered(X,Y), T).
+#show satisfies(X) : satisfies(X, maxTime). 
+#show not_satisfies(X) : not_satisfies(X, maxTime).  
+#show replacement/2. 
+ #show good/1. 
+*%
+% To reduce the output, manually ground the following rule for concerns C that you are interested in
 
-output(C,"concern/aspect (unk)",F,S) :- 
-	inference(concerns,skeptical),
-	last_step(S), concern(C), relevantToFunc(C,F), 
-	not holds(sat(C,F),S),
-	not holds(sat(C,F),S).
+relevantToFunc("cpsf:Cost","cpsf:bc2")                  :- concern("cpsf:Cost").
+relevantToFunc("cpsf:TimeToMarket","cpsf:bc2")   :- concern("cpsf:TimeToMarket").
+relevantToFunc("cpsf:Policy","cpsf:bc2")                :- concern("cpsf:Policy").
+relevantToFunc("cpsf:Performance","cpsf:bc2")     :- concern("cpsf:Performance").
+relevantToFunc("cpsf:Reliability","cpsf:bc2")          :- concern("cpsf:Reliability").
+relevantToFunc("cpsf:Safety","cpsf:bc2")               :- concern("cpsf:Safety").
 
-output_headings("unsatisfied concern/aspect/property","type","function","step").
-	% Step 2 -- to be used together with step1.lp
-% A cyberattack occurs and hacks the SAM to switch 
-% input device 1 to fast-mode.
-%
-% Outcome:
-%   * the CPS no longer satisfies the interity concern
-%     because its properties say that the basic camera cannot 
-%     record at 30+ fps. Hence, the recording is thrown out
-%     of court.
-%
-% Questions:
-%   1. Is the functionality concern satisfied?
-%   2. Is the functional aspect satisfied?
-%   3. Are all aspects satisfied?
-%   4. What happens in the environment?
-% 
-% Answers:
-%   1. No (functionality is violated if the basic type of input
-%          device 1 is operating in fast-mode with encrypted memory)
-%   2. No (because functionality is violated)
-%   3. No (because functional aspect is violated)
-%   4. The recording is thrown out of court (because functional aspect
-%      was violated)
+% Quick workaround since I forgot to include descriptions for the new properties
+descr(P,P) :- atomic_statement(P,A), not input(P,"rdfs:comment",_).
 
-% Knowledge of cyberattacks, effects, and ramifications
-% This is outside of the scope of the CPS Model
+% The pair <Clause_ID, A> is in the private part of the contract. A is a property/requirement
+private_part(C,A) :- input(C,"cpsf:addProperty",P), atomic_statement(P,A).
 
-step(1).
-
-% a cyberattack
-occurs(cyberattack,0).
-fluent(affected(sam)).
-obs(affected(sam),false).
-holds(affected(sam),S2) :-
-	step(S), step(S2), S2=S+1,
-	occurs(cyberattack,S).
--holds(sat("slow_mode_input1"),S) :-
+holds(impacted(C,"cpsf:bc2",pos),S) :-
 	step(S),
-	holds(affected(sam),S).
+	private_part(_,A),
+	holds(sat(A),S),
+	atomic_statement(P,A),
+	input(P,"cpsf:addConcern",C).
 
-% if input device 1 does not function properly, the recording is thrown out
-event(recipient_rejects,S) :- last_step(S),-holds(sat("cpsf:Functional","cpsf:bc1"),S).
-%%%%event_descr(recipient_rejects,"recording thrown out in court")
+holds(impacted(C,"cpsf:bc2",neg),S) :-
+	step(S),
+	private_part(_,A),
+	-holds(sat(A),S),
+	atomic_statement(P,A),
+	input(P,"cpsf:addConcern",C).
 
+
+% There are some LKAS properties in the base ontology that cause
+% certain concerns to be satisfied. This rule ensures that
+% all concerns addressed by properties that are not in a
+% contract's private part are impacted negatively
+holds(impacted(C,F,neg),S) :-
+	step(S),
+	addresses(A,C,F),
+	not private_part(_,A).
+
+% Link the internal names of clauses to their ontology names
+holds(sat("sufficient_material_for_building"), T):- step(T), holds(phi_1,T).
+-holds(sat("sufficient_material_for_building"), T):- step(T), not holds(phi_1,T).
+
+holds(sat("material_safe_for_building"), T):- step(T), holds(phi_2,T).
+-holds(sat("material_safe_for_building"), T):- step(T), not holds(phi_2,T).
+
+holds(sat("material_sufficiently_durable"), T):- step(T), holds(phi_2,T).
+-holds(sat("material_sufficiently_durable"), T):- step(T), not holds(phi_2,T).
+
+holds(sat("acceptable_shipping_cost"), T):- step(T), holds(phi_3,T).
+-holds(sat("acceptable_shipping_cost"), T):- step(T), not holds(phi_3,T).
+
+holds(sat("promptly_send_payment"), T):- step(T), holds(phi_4,T).
+-holds(sat("promptly_send_payment"), T):- step(T), not holds(phi_4,T).
 % ------ Output Interface ------
 
-output(D,event,"-",S) :- event(E,S),event_descr(E,D).
-% Step 3 -- to be used together with step2.lp
-% A cyberattack has occurred and hacked the SAM to switch 
-% input device 1 to fast-mode.
-% The attack affects the SAM and its effect cannot be directly reversed 
-% in order to lower the operating mode of input device 1.
-% We want to know if there is a mitigation and, if so, which one.
-%
-% Outcome:
-%   * Replacing the basic input device 1 with the advanced type solves the
-%     problem. The advanced input device 1 can operate in fast-mode
-%     with encrypted memory enabled.
-%
-% Questions:
-%   1. Is the functionality concern satisfied now?
-%   2. Is the functional aspect satisfied now?
-%   3. Are all aspects satisfied now?
-%   4. What is the mitigation?
-% 
-% Answers:
-%   1. Yes (because the advanced input device 1 can operate
-%           in fast-mode without compromising functionality)
-%   2. Yes (because all concerns and sub-concerns of functional
-%           aspect are satisfied)
-%   3. Yes (because all aspects are satisfied)
-%   4. Replace the basic input device 1 with the advanced one
+descr("using_basic_input1","Basic type of input device 1 is in use").
+event_descr(recipient_rejects,"recipient rejects input").
+action_descr(patch(sam),"patch the SAM").
 
-step(2).
 
-action(enable(C)) :- config_feature(C).
-action_descr(enable(C),enable(D)) :- config_feature(C), descr(C,D).
-action(disable(C)) :- config_feature(C).
-action_descr(disable(C),disable(D)) :- config_feature(C), descr(C,D).
-
-do(A,S) v -do(A,S) :- step(S), action(A), not last_step(S).
-%%%%:- step(S), do(A1,S), do(A2,S), A1!=A2.
-
-% Minimize the number of actions
-:~ do(A,S), action(A), step(S).
-
-% EXAMPLE-SPECIFIC: do not execute actions before the cyberattack
-:- step(S1), step(S2), S1<=S2, action(A), do(A,S1), occurs(cyberattack,S2).
-
-% Effects of actions
-holds(sat(F),S2) :-
-	step(S), step(S2), S2=S+1,
-	fluent(sat(F)),
-	do(enable(F),S).
-:- step(S), fluent(sat(F)), do(enable(F),S), holds(sat(F),S).
--holds(sat(F),S2) :- 
-	step(S), step(S2), S2=S+1,
-	fluent(sat(F)),
-	do(disable(F),S).
-:- step(S), fluent(sat(F)), do(disable(F),S), -holds(sat(F),S).
-
-% The entire concern tree of every function must be satisfied
-:- last_step(S), functionClass(F,FC), -holds(sat(all,F),S).
-
-output(D,action,"-",S) :- step(S), action(A), do(A,S), action_descr(A,D).
-output("probability of success",P,"-",S) :- step(S), holds(prob_of_state(P),S).
-% Step 3  -- to be used together with step3.lp
-% A cyberattack has occurred and hacked the SAM to switch 
-% input device 1 to fast-mode.
-% The attack affects the SAM and its effect on the SAM cannot 
-% be reversed unless a patch is applied to the SAM. The SAM
-% forces the SAM to switch input device 1 to slow-mode.
-% We want to know if there is a mitigation and, if so, which one.
-%
-% Outcome:
-%   * Replacing the basic input device 1 with the advanced type solves the
-%     problem. The advanced input device 1 can operate in fast-mode
-%     with encrypted memory enabled.
-%   * Patching the SAM is another mitigation.
-%
-% Questions:
-%   1. Is the functionality concern satisfied now?
-%   2. Is the functional aspect satisfied now?
-%   3. Are all aspects satisfied now?
-%   4. What is the mitigation?
-% 
-% Answers:
-%   1. Yes (because the advanced input device 1 can operate
-%           in fast-mode without compromising functionality)
-%   2. Yes (because all concerns and sub-concerns of functional
-%           aspect are satisfied)
-%   3. Yes (because all aspects are satisfied)
-%   4a. Replace the basic input device 1 with the advanced one
-%   4b. Patch the SAM
-
-action(patch(sam)).
-prob_success(patch(sam),80).
-%%%%action_descr(patch(sam),"patch the SAM").
-
-% Effects of actions
--holds(affected(sam),S2) :-
-	step(S), step(S2), S2=S+1,
-	do(patch(sam),S).
-holds(sat("slow_mode_input1"),S2) :-
-	step(S), step(S2), S2=S+1,
-	do(patch(sam),S).
-:- step(S), do(patch(sam),S), -holds(affected(sam),S).
-
-% already enforced by step3.lp
-%% The entire concern tree of every function must be satisfied
-%:- last_step(S), functionClass(F,FC), -holds(sat(all,F),S).
-% Step 3  -- to be used together with step3.lp
-% A cyberattack has occurred and hacked the SAM to switch 
-% input device 1 to fast-mode.
-% The attack affects the SAM and its effect on the SAM cannot 
-% be reversed unless a patch is applied to the SAM. The SAM
-% forces the SAM to switch input device 1 to slow-mode.
-% We want to know if there is a mitigation and, if so, which one.
-%
-% Outcome:
-%   * Replacing the basic input device 1 with the advanced type solves the
-%     problem. The advanced input device 1 can operate in fast-mode
-%     with encrypted memory enabled.
-%   * Patching the SAM is another mitigation, but has an 80% probability of success.
-%
-% Questions:
-%   1. Is the functionality concern satisfied now?
-%   2. Is the functional aspect satisfied now?
-%   3. Are all aspects satisfied now?
-%   4. What is the mitigation?
-% 
-% Answers:
-%   1. Yes (because the advanced input device 1 can operate
-%           in fast-mode without compromising functionality)
-%   2. Yes (because all concerns and sub-concerns of functional
-%           aspect are satisfied)
-%   3. Yes (because all aspects are satisfied)
-%   4a. Replace the basic input device 1 with the advanced one
-%   4b. Patch the SAM
-
-%prob_success(disable("using_basic_input1"),95).
-prob_success(patch(sam),80).
+output(A,action,"-",S) :- step(S), occurs(A,S).

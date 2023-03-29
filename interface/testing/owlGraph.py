@@ -36,19 +36,23 @@ class owlGraph:
         self.formulasDecompFuncEdges = None
         self.formulasPropertyEdges = None
         self.componentEdges = None
+        self.clauseEdges = None
 
         self.concernEdgeLabels = None
         self.concernFormulasEdgeLabels = None
         self.formulasDecompFuncEdgeLabels = None
         self.formulasPropertyEdgeLabels = None
         self.componentEdgeLabels = None
+        self.clauseEdgeLabels = None
 
         self.aspectNodeLabels = None
         self.concernNodeLabels = None
         self.propertyNodeLabels = None
+        self.clauseNodeLabels = None
         self.formulasNodeLabels = None
         self.decompFuncNodeLabels = None
         self.componentNodeLabels = None
+        self.clauseNodeLabels = None
 
         self.minX = None
         self.maxX = None
@@ -78,6 +82,7 @@ class owlGraph:
         self.aspectConcernArray = np.array(())
         self.aspectNameList = [[]]
         self.propertyArray = np.array(())
+        self.clauseArray = np.array(())
         self.formulasArray = np.array(())
         self.decompFuncArray = np.array(())
         self.componentArray = np.array(())
@@ -111,6 +116,12 @@ class owlGraph:
                     #print("found property " + node.name)
                     self.netXGraph.add_node(node.name)
                     self.propertyArray = np.append(self.propertyArray,node)
+
+                if(str(node.type) == "Clause" and self.graphProperties == True):
+                    #print("found property")
+                    #print("found property " + node.name)
+                    self.netXGraph.add_node(node.name)
+                    self.clauseArray = np.append(self.clauseArray,node)
                 
                 elif(str(node.type) == "Formulas" and self.graphProperties == True):
                     #print(node.name)
@@ -155,6 +166,7 @@ class owlGraph:
         self.concernPropertyEdges = []
         
         self.componentEdges = []
+        self.clauseEdges = []
         
         
         
@@ -176,6 +188,7 @@ class owlGraph:
         self.concernPropertyEdgeLabels = {}
         
         self.componentEdgeLabels = {}
+        self.clauseEdgeLabels = {}
 
 
         for node in self.owlBase.allConcerns_owlNode:
@@ -186,6 +199,7 @@ class owlGraph:
 
             for child in node.children:
 
+                #print(str(node.name)+";"+str(child.name) + " in CONCERN edges") # [MB}
                 #print(str(child) + " in edges")
 
                 if(child.type == "Concern"):
@@ -214,11 +228,11 @@ class owlGraph:
              return
 
         for node in self.owlApplication.nodeArray:
+           
+            #print(str(node.name)+": "+str(node.type)) # [MB}
 
             if (len(node.children) + len(node.negChildren)) == 0:
                 continue
-            
-           
 
           
             for negChild in node.negChildren:
@@ -283,7 +297,7 @@ class owlGraph:
 
             for child in node.children:
 
-                #print(str(child) + " in edges")
+                #print(str(node.name)+";"+str(child.name) + " in edges") # [MB}
 
                 
                 #WILL NEED TO ADAPT THIS FOR NEGATION
@@ -330,8 +344,14 @@ class owlGraph:
                         
                         self.componentEdges.append((node.name,child.name))
                         self.componentEdgeLabels[(node.name,child.name)] = "relatedTo" 
+
+                elif(child.type == "Clause" and self.graphProperties == True):
+                        self.netXGraph.add_edge(node.name,child.name,length = 1)
+                        self.clauseEdges.append((node.name,child.name))
+                        self.clauseEdgeLabels[(node.name,child.name)] = "addProperty"
+
                 else:
-                    print("tom")
+                    #print("tom")
                     print(node.name)
                         
                         
@@ -354,6 +374,7 @@ class owlGraph:
         self.aspectNodeLabels = {}
         self.concernNodeLabels = {}
         self.propertyNodeLabels = {}
+        self.clauseNodeLabels = {}
         self.formulasNodeLabels = {}
         self.decompFuncNodeLabels = {}
         self.componentNodeLabels = {}
@@ -384,6 +405,11 @@ class owlGraph:
 
                     #print("Property adding, ", node.name)
                     self.propertyNodeLabels[node.name] = node.name
+                    
+                elif(node.type == "Clause" and self.graphProperties == True):
+
+                    #print("Property adding, ", node.name)
+                    self.clauseNodeLabels[node.name] = node.name
                     
                 elif(node.type == "Formulas" and self.graphProperties == True):
 
@@ -470,6 +496,7 @@ class owlGraph:
         
        
         property_color = "#595858"
+        clause_color = "#ffffff"
         formulas_color = "#3000ab"
         decompfunc_color ="#3000ab"
         #decompfunc_color = "#0eb0a8"
@@ -504,6 +531,7 @@ class owlGraph:
         
         
         nx.draw_networkx_edges(self.netXGraph, pos = self.graphPositions, edgelist = self.componentEdges, arrows=False,style = "dotted",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
+        nx.draw_networkx_edges(self.netXGraph, pos = self.graphPositions, edgelist = self.clauseEdges, arrows=True,style = "solid",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
 
 
         nx.draw_networkx_edge_labels(self.netXGraph, pos = self.graphPositions, edge_labels=self.concernEdgeLabels,font_size = fs)
@@ -524,6 +552,7 @@ class owlGraph:
         
         
         nx.draw_networkx_edge_labels(self.netXGraph, pos = self.graphPositions, edge_labels=self.componentEdgeLabels,font_size = fs)
+        nx.draw_networkx_edge_labels(self.netXGraph, pos = self.graphPositions, edge_labels=self.clauseEdgeLabels,font_size = fs)
 
 
         nx.draw_networkx_labels(self.netXGraph,self.graphPositions,self.aspectNodeLabels,font_size=fs,bbox=dict(facecolor=aspect_color, boxstyle='square,pad=.3'),font_color = "white")
@@ -531,6 +560,7 @@ class owlGraph:
 
         if(self.owlApplication != None):
             nx.draw_networkx_labels(self.netXGraph,self.graphPositions,self.propertyNodeLabels,font_size=fs*.90,bbox=dict(facecolor=property_color, boxstyle='round4,pad=.3'),font_color = "white")
+            nx.draw_networkx_labels(self.netXGraph,self.graphPositions,self.clauseNodeLabels,font_size=fs*.90,bbox=dict(facecolor=clause_color, boxstyle='round4,pad=.3'),font_color = "red")
             
             list_names = ["workshop_ontologies/cpsframework-v3-sr-LKAS-Configuration-V1.owl","workshop_ontologies/cpsframework-v3-blank-app.owl"]
             if(self.owlApplication.owlName in list_names):

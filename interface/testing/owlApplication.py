@@ -11,6 +11,7 @@ class owlApplication:
         
         
         self.handleProperties = True
+        self.handleClauses = True
         self.handleComponents = True
         
         self.owlreadyOntology = None
@@ -23,12 +24,14 @@ class owlApplication:
         
         self.allComponents_owlNode = None
         self.allProperties_owlNode = None
+        self.allClauses_owlNode = None
         self.allFormulas_owlNode = None
         self.allDecompFuncs_owlNode = None
         
         self.numNodes = None
         self.numComponents = None
         self.numProperties = None
+        self.numClauses = None
      
         
         self.owlGraph = None
@@ -65,6 +68,10 @@ class owlApplication:
                 
             self.addFuncDecomps()
             
+        if(self.handleClauses == True):
+            
+            self.addClauses()
+            self.handleClausesAddressProperties()
             
         if(self.handleComponents == True):
             
@@ -78,7 +85,7 @@ class owlApplication:
                 self.handleMemberOf()
                 
             except:
-                print("couldn't ao memberof")
+                print("couldn't do memberof")
                 
             try:
                 self.handleNegMemberOf()
@@ -117,6 +124,30 @@ class owlApplication:
             newOwlNode.owlreadyObj = prop
             
             self.allProperties_owlNode.append(newOwlNode)
+            self.nodeArray.append(newOwlNode)    
+         
+            
+        
+    def addClauses(self):
+        
+        self.allClauses_owlNode = []
+        
+        all_cls = np.asarray(self.owlreadyOntology.search(type = self.owlreadyOntology.Clause))
+       
+        
+        
+        for c in all_cls:
+            print("ADDING CLAUSE "+remove_namespace(c))
+            newOwlNode = owlNode()
+            newOwlNode.name = remove_namespace(c)
+            newOwlNode.type = "Clause"
+            newOwlNode.children = []
+            newOwlNode.negChildren = []
+            newOwlNode.parents = []
+            
+            newOwlNode.owlreadyObj = c
+            
+            self.allClauses_owlNode.append(newOwlNode)
             self.nodeArray.append(newOwlNode)    
             
             
@@ -269,7 +300,6 @@ class owlApplication:
                 
                 
     def handleRelateToProperty(self):
-        
         for comp in self.allComponents_owlNode:
             
          
@@ -286,6 +316,19 @@ class owlApplication:
         
                 prop_owlNode.children.append(comp)
                 comp.parents.append(prop_owlNode)
+                
+                
+    def handleClausesAddressProperties(self):
+        print("IN HANDLING!!!!!!! #="+str(len(self.allClauses_owlNode)))
+        for clause in self.allClauses_owlNode:
+            print("HANDLING: "+clause.name)
+            all_add_props = clause.owlreadyObj.addProperty
+            print("   all_add_props #="+str(len(all_add_props)))
+            #prop is owlready node
+            for prop in all_add_props:
+                prop_owlNode = self.getOwlNode(remove_namespace(prop))
+                prop_owlNode.children.append(clause)
+                clause.parents.append(prop_owlNode)
   
      
         
@@ -306,6 +349,14 @@ class owlApplication:
         new_property.is_a.append(self.owlreadyOntology.Formulas)
         
         parent.owlreadyObj.relateToProperty.append(new_property)
+        
+    def addClauseAsChildofProperty(self,parentProperty,new_clause_name):
+        
+        new_clause = self.owlreadyOntology.Clause(new_clause_name, ontology = self.owlreadyOntology)
+#        new_clause.is_a.append(self.owlreadyOntology.Formulas) # TODO determine if this is needed and if it is correct
+        
+        new_clause.addProperty.append(parentProperty.owlreadyObj)
+     
         
     def addRLProperty(self,new_name):
         
@@ -445,6 +496,10 @@ class owlApplication:
                      
         
     def editPropertyName(self,node,new_name):
+        
+        node.owlreadyObj.name = new_name
+
+    def editClauseName(self,node,new_name):
         
         node.owlreadyObj.name = new_name
         
@@ -590,7 +645,12 @@ class owlApplication:
             self.numProperties = len(self.allProperties_owlNode)
         except:
             self.numProperties = 0
-        self.numNodes = self.numComponents + self.numProperties
+            
+        try:
+            self.numClauses = len(self.allClauses_owlNode)
+        except:
+            self.numClauses = 0
+        self.numNodes = self.numComponents + self.numProperties + self.numClauses
         
     def isProperty(self,owlreadyobj):
         
@@ -599,6 +659,18 @@ class owlApplication:
         for istype in is_a:
             
             if(remove_namespace(istype) == "Property"):
+                
+                return True
+            
+        return False   
+        
+    def isClause(self,owlreadyobj):
+        
+        is_a = owlreadyobj.is_a
+        
+        for istype in is_a:
+            
+            if(remove_namespace(istype) == "Clause"):
                 
                 return True
             

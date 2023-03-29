@@ -28,7 +28,48 @@
 %
 
 *LBL
-<html><u><font color='red'>Reasoning examples</font></u></html>
+<html><u><font color='red'> Supply Chain Homebuilder scenario: evaluation use cases</font></u></html>
+*QUERY
+Only two deliveries made: all clauses violated
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-1.txt
+*QUERY
+Insufficient amount of lumber delivered, but paid for promptly
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-2.txt
+*QUERY
+Sufficient material delivered and paid for: all clauses satisfied
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-3.txt
+*LBL
+ 
+
+*LBL
+<html><u><font color='red'> Supply Chain Homebuilder scenario: planning use cases</font></u></html>
+*QUERY
+Sufficient amount of lumber, desired quality
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-plan-1.txt
+*QUERY
+Lack of desired lumber quality but availability of higher lumber quality
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-plan-2.txt
+*QUERY
+Insufficient amount of lumber
+EX6-supplychainHomebuilder
+clingo
+FULL-supplychain-plan-3.txt
+*LBL
+ 
+
+
+*LBL
+<html><u><font color='red'>Reasoning examples</font></u> (older tests)</html>
 *QUERY
 Optimistic reasoning
 EX0-optimistic
@@ -140,3 +181,4 @@ dlv (all models)
 FULL-step3-ext.txt
 *LBL
  
+

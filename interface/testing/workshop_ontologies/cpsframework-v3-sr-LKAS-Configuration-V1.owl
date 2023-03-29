@@ -24,6 +24,17 @@
 
     <owl:Class rdf:about="http://www.asklab.tk/ontologies/CPS-Framework#DecompositionFunction"/>
 
+
+    <!-- http://www.asklab.tk/ontologies/CPS-Framework#Clause -->
+
+    <owl:Class rdf:about="http://www.asklab.tk/ontologies/CPS-Framework#Clause"/>
+
+    <!-- http://www.asklab.tk/ontologies/CPS-Framework#addProperty -->
+    <owl:ObjectProperty rdf:about="http://www.asklab.tk/ontologies/CPS-Framework#addProperty">
+        <rdfs:domain rdf:resource="http://www.asklab.tk/ontologies/CPS-Framework#Clause"/>
+        <rdfs:range rdf:resource="http://www.asklab.tk/ontologies/CPS-Framework#Property"/>
+    </owl:ObjectProperty>
+
     <!-- http://www.asklab.tk/ontologies/CPS-Framework#memberOf -->
     <owl:ObjectProperty rdf:about="http://www.asklab.tk/ontologies/CPS-Framework#memberOf">
         <rdfs:domain rdf:resource="http://www.asklab.tk/ontologies/CPS-Framework#Property"/>

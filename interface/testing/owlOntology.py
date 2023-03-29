@@ -17,10 +17,12 @@ class owlOntology:
         self.nodeArray = None
         self.concernArray = None
         self.propertyArray = None
+        self.clauseArray = None
         self.numNodes = None
         self.numAspects = None
         self.numConcerns = None
         self.numProperties = None
+        self.numClauses = None
         self.numComponents = None
         self.numConditions = None
         self.numImpactRules = None
@@ -34,15 +36,19 @@ class owlOntology:
 
         self.aspectConcernArray = None
         self.propertyArray = None
+        self.clauseArray = None
         self.subconcernEdges = None
         self.propertyEdges = None
+        self.clauseEdges = None
 
         self.concernEdgeLabels = None
         self.propertyEdgeLabels = None
+        self.clauseEdgeLabels = None
 
         self.aspectNodeLabels = None
         self.concernNodeLabels = None
         self.propertyNodeLabels = None
+        self.clauseNodeLabels = None
 
 
         self.minX = None
@@ -102,6 +108,7 @@ class owlOntology:
 
         self.aspectConcernArray = np.array(())
         self.propertyArray = np.array(())
+        self.clauseArray = np.array(())
 
         for node in self.allConcerns_owlNode:
             #print(str(node.name) + " in add_nodes")
@@ -114,6 +121,9 @@ class owlOntology:
             elif(str(node.type) == "Property"):
                 #print("found property")
                 self.propertyArray = np.append(self.propertyArray,node)
+            elif(str(node.type) == "Clause"):
+                #print("found property")
+                self.clauseArray = np.append(self.clauseArray,node)
             else:
                 print("couldnt find type")
                 print(node.type)
@@ -126,6 +136,7 @@ class owlOntology:
 
         self.subconcernEdges = []
         self.propertyEdges = []
+        self.clauseEdges = []
 
 
         for node in self.allConcerns_owlNode:
@@ -149,10 +160,17 @@ class owlOntology:
                     self.propertyEdges.append((node.name,child.name))
 
 
+                if(child.type == "Clause"):
+
+                    self.owlGraph.add_edge(node.name,child.name,length = 1)
+                    self.clauseEdges.append((node.name,child.name))
+
+
     def addEdgeLabels(self):
 
         self.concernEdgeLabels = {}
         self.propertyEdgeLabels = {}
+        self.clauseEdgeLabels = {}
 
         for edge in self.subconcernEdges:
             self.concernEdgeLabels[edge] = 'subconcern'
@@ -160,11 +178,15 @@ class owlOntology:
         for edge in self.propertyEdges:
             self.propertyEdgeLabels[edge] = 'addresses concern'
 
+        for edge in self.clauseEdges:
+            self.clauseEdgeLabels[edge] = 'addresses property'
+
     def addNodeLabels(self):
 
         self.aspectNodeLabels = {}
         self.concernNodeLabels = {}
         self.propertyNodeLabels = {}
+        self.clauseNodeLabels = {}
 
 
         for node in self.aspectConcernArray:
@@ -178,6 +200,9 @@ class owlOntology:
 
         for myproperty in self.propertyArray:
             self.propertyNodeLabels[myproperty] = myproperty
+
+        for myclause in self.clauseArray:
+            self.clauseNodeLabels[myclause] = myclause
 
     def setPositions(self):
 
@@ -243,6 +268,7 @@ class owlOntology:
         aspect_color = "#000a7d"
         concern_color = "#800000"
         property_color = "#595858"
+        clause_color = "#ffffff"
         edge_color = "black"
         edge_width = 2
         edge_alpha = .8
@@ -253,14 +279,17 @@ class owlOntology:
 
         nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.subconcernEdges, arrows=False,style = "solid",width = edge_width,edge_color = edge_color,alpha = edge_alpha)
         nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.propertyEdges, arrows=False,style = "dashed",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
+        nx.draw_networkx_edges(self.owlGraph, pos = self.graphPositions, edgelist = self.clauseEdges, arrows=True,style = "dashed",width = edge_width,edge_color = edge_color, alpha = edge_alpha)
 
 
         nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.concernEdgeLabels,font_size = fs)
         nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.propertyEdgeLabels,font_size = fs)
+        nx.draw_networkx_edge_labels(self.owlGraph, pos = self.graphPositions, edge_labels=self.clauseEdgeLabels,font_size = fs)
 
         nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.aspectNodeLabels,font_size=fs,bbox=dict(facecolor=aspect_color, boxstyle='square,pad=.3'),font_color = "white")
         nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.concernNodeLabels,font_size=fs,bbox=dict(facecolor=concern_color, boxstyle='square,pad=.3'),font_color = "white")
         nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.propertyNodeLabels,font_size=fs,bbox=dict(facecolor=property_color, boxstyle='round4,pad=.3'),font_color = "white")
+        nx.draw_networkx_labels(self.owlGraph,self.graphPositions,self.clauseNodeLabels,font_size=fs,bbox=dict(facecolor=clause_color, boxstyle='round4,pad=.3'),font_color = "white")
 
 
 
@@ -427,7 +456,8 @@ class owlOntology:
         self.numAspects =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Aspect))
         self.numConcerns =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Concern))
         self.numProperties =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Property))
-        self.numNodes = self.numAspects + self.numConcerns + self.numProperties
+        self.numClauses =  len(self.owlReadyOntology.search(type = self.owlReadyOntology.Clause))
+        self.numNodes = self.numAspects + self.numConcerns + self.numProperties + self.numClauses
 
         self.numComponents = 0
         self.numConditions = len(self.owlReadyOntology.search(type = self.owlReadyOntology.Condition))
@@ -542,6 +572,7 @@ class owlOntology:
         print("numAspects = " + str(self.numAspects))
         print("numConcerns = " + str(self.numConcerns))
         print("numProperties = " + str(self.numProperties))
+        print("numClauses = " + str(self.numClauses))
         print("numComponents = " + str(self.numComponents))
         print("numImpactRules = " + str(self.numImpactRules))
         print("numConditions = " + str(self.numConditions))

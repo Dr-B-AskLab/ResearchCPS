@@ -75,6 +75,15 @@
   <rdfs:subClassOf rdf:resource="#Formula"/>
 </owl:Class>
 
+
+<owl:Class rdf:about="#Clause"/>
+
+<owl:ObjectProperty rdf:about="#addProperty">
+  <rdfs:domain rdf:resource="#Clause"/>
+  <rdfs:range rdf:resource="#Property"/>
+</owl:ObjectProperty>
+
+
 <Formula rdf:about="#Advanced_Mode">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   <rdf:type rdf:resource="#Property"/>

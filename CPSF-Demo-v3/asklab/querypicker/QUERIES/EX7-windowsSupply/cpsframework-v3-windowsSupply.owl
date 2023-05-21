@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://www.asklab.tk/ontologies/CPS-Framework"
+         xmlns="http://www.asklab.tk/ontologies/CPS-Framework#">
+
+<owl:Ontology rdf:about="http://www.asklab.tk/ontologies/CPS-Framework"/>
+
+<owl:ObjectProperty rdf:about="#addConcern">
+  <rdfs:domain rdf:resource="#Property"/>
+  <rdfs:range rdf:resource="#Concern"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#addProperty">
+  <rdfs:domain rdf:resource="#Clause"/>
+  <rdfs:range rdf:resource="#Property"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#addressToFunc">
+  <rdfs:domain rdf:resource="#Formulas"/>
+  <rdfs:range rdf:resource="#DecompositionFunction"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#confComponent">
+  <rdfs:domain rdf:resource="#Component_Property"/>
+  <rdfs:range rdf:resource="#Component"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#confProperty">
+  <rdfs:domain rdf:resource="#Component_Property"/>
+  <rdfs:range rdf:resource="#Property"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#memberOf">
+  <rdfs:domain rdf:resource="#Property"/>
+  <rdfs:range rdf:resource="#Formulas"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#positiveImpactTo">
+  <rdfs:domain rdf:resource="#Component_Property"/>
+  <rdfs:range rdf:resource="#Concern"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#relateToProperty">
+  <rdfs:domain rdf:resource="#Component"/>
+  <rdfs:range rdf:resource="#Property"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#Concern"/>
+
+<owl:Class rdf:about="#Property"/>
+
+<owl:Class rdf:about="#Clause"/>
+
+<owl:Class rdf:about="#Formulas"/>
+
+<owl:Class rdf:about="#DecompositionFunction"/>
+
+<owl:Class rdf:about="#Component_Property"/>
+
+<owl:Class rdf:about="#Component"/>
+
+<rdf:Description rdf:about="#Authorization">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="#Encryption">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="#Verification">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="#Integrity">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<Property rdf:about="#Acceptable_Shipping_Cost">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#Cost"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>acceptable_shipping_cost</atomicStatement>
+</Property>
+
+<Formulas rdf:about="#g6">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Operation_Func"/>
+</Formulas>
+
+<rdf:Description rdf:about="#Energy_Func">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<Property rdf:about="#Material_Ready_For_Building">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#Safety"/>
+  <addConcern rdf:resource="#Reliability"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>material_ready_for_building</atomicStatement>
+</Property>
+
+<Property rdf:about="#Suitable_For_Solar_Panel_Heating">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#Environment"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>solar_panel_requirement</atomicStatement>
+</Property>
+
+<Property rdf:about="#Material_Sufficiently_Durable">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#Performance"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>material_sufficiently_durable</atomicStatement>
+</Property>
+
+<rdf:Description rdf:about="#Operation_Func">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<Property rdf:about="#Promptly_Send_Payment">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#Policy"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>promptly_send_payment</atomicStatement>
+</Property>
+
+<rdf:Description rdf:about="#Sign_In_Func">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<Property rdf:about="#Sufficient_Material_For_Building">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addConcern rdf:resource="#TimeToMarket"/>
+  <memberOf rdf:resource="#g6"/>
+        <atomicStatement>sufficient_material_for_building</atomicStatement>
+</Property>
+
+<Formulas rdf:about="#g1">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Sign_In_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g10">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Energy_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g2">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Sign_In_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Sign_In_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g4">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Sign_In_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g5">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Sign_In_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g7">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Operation_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g8">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Energy_Func"/>
+</Formulas>
+
+<Formulas rdf:about="#g9">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addressToFunc rdf:resource="#Energy_Func"/>
+</Formulas>
+
+<Clause rdf:about="#C1">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addProperty rdf:resource="#Sufficient_Material_For_Building"/>
+</Clause>
+
+<Clause rdf:about="#C2">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addProperty rdf:resource="#Material_Ready_For_Building"/>
+  <addProperty rdf:resource="#Material_Sufficiently_Durable"/>
+</Clause>
+
+<Clause rdf:about="#C4">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addProperty rdf:resource="#Promptly_Send_Payment"/>
+</Clause>
+
+<Clause rdf:about="#C3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addProperty rdf:resource="#Acceptable_Shipping_Cost"/>
+</Clause>
+
+<Clause rdf:about="#C5">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <addProperty rdf:resource="#Suitable_For_Solar_Panel_Heating"/>
+</Clause>
+
+
+</rdf:RDF>

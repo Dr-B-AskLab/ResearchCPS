@@ -91,19 +91,13 @@ input("cpsf:SAMEncryptedMem","cpsf:atomicStatement","encrypted_mem_sam").
 input("cpsf:SAMEncryptedMem","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:SAMEncryptedMem","rdf:type","cpsf:Property").
 input("cpsf:SAMEncryptedMem","rdf:type","owl:NamedIndividual").
-input("cpsf:Material_Safe_For_Building","cpsf:atomicStatement","material_safe_for_building").
-input("cpsf:Material_Safe_For_Building","cpsf:memberOf","cpsf:g6").
-input("cpsf:Material_Safe_For_Building","cpsf:addConcern","cpsf:Reliability").
-input("cpsf:Material_Safe_For_Building","cpsf:addConcern","cpsf:Safety").
-input("cpsf:Material_Safe_For_Building","rdf:type","owl:NamedIndividual").
-input("cpsf:Material_Safe_For_Building","rdf:type","cpsf:Property").
 input("cpsf:Component_Property","rdf:type","owl:Class").
 input("cpsf:Input1SecBoot","cpsf:atomicStatement","sec_boot_input1").
 input("cpsf:Input1SecBoot","cpsf:hasType","cpsf:PropertyType_Assertion").
 input("cpsf:Input1SecBoot","rdf:type","cpsf:Property").
 input("cpsf:Input1SecBoot","rdf:type","owl:NamedIndividual").
 input("cpsf:C2","cpsf:addProperty","cpsf:Material_Sufficiently_Durable").
-input("cpsf:C2","cpsf:addProperty","cpsf:Material_Safe_For_Building").
+input("cpsf:C2","cpsf:addProperty","cpsf:Material_Ready_For_Building").
 input("cpsf:C2","rdf:type","owl:NamedIndividual").
 input("cpsf:C2","rdf:type","cpsf:Clause").
 input("cpsf:Formulas","rdf:type","owl:Class").
@@ -187,6 +181,14 @@ input("cpsf:Usability","rdf:type","cpsf:Concern").
 input("cpsf:Usability","rdf:type","owl:NamedIndividual").
 input("cpsf:TimeOfData","rdf:type","cpsf:Concern").
 input("cpsf:TimeOfData","rdf:type","owl:NamedIndividual").
+input("cpsf:C5","cpsf:addProperty","cpsf:Suitable_For_Solar_Panel_Heating").
+input("cpsf:C5","rdf:type","owl:NamedIndividual").
+input("cpsf:C5","rdf:type","cpsf:Clause").
+input("cpsf:Suitable_For_Solar_Panel_Heating","cpsf:atomicStatement","solar_panel_requirement").
+input("cpsf:Suitable_For_Solar_Panel_Heating","cpsf:memberOf","cpsf:g6").
+input("cpsf:Suitable_For_Solar_Panel_Heating","cpsf:addConcern","cpsf:Environment").
+input("cpsf:Suitable_For_Solar_Panel_Heating","rdf:type","owl:NamedIndividual").
+input("cpsf:Suitable_For_Solar_Panel_Heating","rdf:type","cpsf:Property").
 input("cpsf:Producibility","rdf:type","cpsf:Concern").
 input("cpsf:Producibility","rdf:type","owl:NamedIndividual").
 input("cpsf:Planning","rdf:type","cpsf:Concern").
@@ -375,6 +377,12 @@ input("cpsf:Lifecycle","cpsf:includesConcern","cpsf:Disposability").
 input("cpsf:Lifecycle","cpsf:includesConcern","cpsf:Deployability").
 input("cpsf:Lifecycle","rdf:type","cpsf:Aspect").
 input("cpsf:Lifecycle","rdf:type","owl:NamedIndividual").
+input("cpsf:Material_Ready_For_Building","cpsf:atomicStatement","material_ready_for_building").
+input("cpsf:Material_Ready_For_Building","cpsf:memberOf","cpsf:g6").
+input("cpsf:Material_Ready_For_Building","cpsf:addConcern","cpsf:Reliability").
+input("cpsf:Material_Ready_For_Building","cpsf:addConcern","cpsf:Safety").
+input("cpsf:Material_Ready_For_Building","rdf:type","owl:NamedIndividual").
+input("cpsf:Material_Ready_For_Building","rdf:type","cpsf:Property").
 input("cpsf:ir0001","rdfs:comment","cpsf:Integrity is addressed by property cpsf:SAMSecBoot").
 input("cpsf:ir0001","cpsf:hasCondition","cpsf:c0001_01").
 input("cpsf:ir0001","cpsf:addressesPolarity","cpsf:positive").
@@ -616,8 +624,7 @@ input("cpsf:Storage","rdf:type","owl:NamedIndividual").
 input("cpsf:g4","cpsf:addressToFunc","cpsf:Sign_In_Func").
 input("cpsf:g4","rdf:type","owl:NamedIndividual").
 input("cpsf:g4","rdf:type","cpsf:Formulas").
-#const case=2.
-#const pool=1.
+#const case=3.
 
 %       -- to be used together with theory*.lp
 %          and with step1-BASE.lp
@@ -648,7 +655,9 @@ output(C,"concern/aspect (unk)",F,S) :-
 output_headings("satisfied concern/aspect/property","type","function","step").
 
 % Display replacement information
-output(replace_quality(Amt,Q),"corrective-measure","-",S) :- last_step(S), replacement(Amt,Q).
+output(replace_quality(Amt,Q),"corrective-measure","-",S) :- replacement(Amt,Q,S).
+
+output(A,action,"-",S) :- step(S), occurs(A,S).
 % ======== SIMPLE EXAMPLE 1 ========
 %       -- to be used together with theory*.lp
 %          and with step1-{optimistic,skeptical,pessimistic}.lp
@@ -684,11 +693,11 @@ output(replace_quality(Amt,Q),"corrective-measure","-",S) :- last_step(S), repla
 
 % Properties
 % ---Observations
-%obs(sat("encrypted_mem_input1"),false).
-%obs(sat("encrypted_mem_sam"),false).
-%obs(sat("sec_boot_input1"),false).
-%obs(sat("sec_boot_sam"),false).
-%obs(sat("slow_mode_input1"),false).
+obs(sat("encrypted_mem_input1"),false).
+obs(sat("encrypted_mem_sam"),false).
+obs(sat("sec_boot_input1"),false).
+obs(sat("sec_boot_sam"),false).
+obs(sat("slow_mode_input1"),false).
 
 step(0).
 
@@ -1165,198 +1174,365 @@ holds(prob_of_state(P),S2) :-
 	step(S), step(S2), S2=S+1,
 	holds(prob_of_state(P),S),
 	unk_prob_success(S).
-#const maxTime=4. 
+%%%%%INSTANCES DEFINITIONS
 
-step(0..maxTime). 
-
-example(case). 
-
-%%% example 1 
-
-assume(lumber_board(150000,1)) :- example(1).  
-
-%%% example 2
-
-assume(lumber_board(100000,1)) :- example(2). 
-assume(lumber_board(50000,2))   :- example(2).
-
-%%% example 3
-
-assume(lumber_board(100000,1)) :- example(3). 
-%assume(lumber_board(50000,2))   :- example(2).
+example(case).
 
 
-grade(0..3). 
+%%% Example 1 -- No broken windows and everything is alright
+broken_percentage(0) 	  	:- example(1).
+initial_w_available(1000) 	:- example(1).
+min_w_quality(0)			:- example(1).
+max_w_quality(3)			:- example(1).
+windows_amount(500)			:- example(1).
+init(available_windows(1000,Q1..Q2)) :- example(1), min_w_quality(Q1), max_w_quality(Q2).
 
-init(board(0,0..2)).
-init(available_fund(200000)). 
+%%% Example 2 -- 10% windows broken, Seller replace them with same quality windows
+broken_percentage(10) 	  	:- example(2).
+initial_w_available(1000) 	:- example(2).
+min_w_quality(0)			:- example(2).
+max_w_quality(3)			:- example(2).
+windows_amount(550)			:- example(2).
+init(available_windows(1000,1)) :- example(2).
+init(available_windows(550,2)) :- example(2).
+init(available_windows(1000,3)) :- example(2).
 
-%amount(1000).
-amount(5000).
-amount(10000).
-amount(20000).
-amount(30000).
-amount(40000).
-%amount(44000).
-amount(50000).
-amount(100000).
-amount(150000). 
+%%% Example 3 -- 10% windows broken, Seller replace them with diff quality windows (solar panel requirement satisfied)
+broken_percentage(10) 	  	:- example(3).
+initial_w_available(400) 	:- example(3).
+min_w_quality(0)			:- example(3).
+max_w_quality(3)			:- example(3).
+windows_amount(220)			:- example(3).
+windows_amount(330)			:- example(3).
+init(available_windows(1000,1)) :- example(3).
+init(available_windows(500,2)) :- example(3).
+init(available_windows(1000,3)) :- example(3).
 
-holds(lumber_board(X,Y), 0) :-  assume(lumber_board(X,Y)). 
-holds(lumber_board(0,G), 0)  :-  grade(G), not assume(lumber_board(_,G)). 
-holds(lumber_board(X-Z,Y), T+1) :-  step(T), holds(lumber_board(X,Y), T), observation(delivered(Z,Y),T).
-holds(lumber_board(X,Y), T+1) :-  step(T), holds(lumber_board(X,Y), T), not delivered(Y,T).
-delivered(Y,T) :- observation(delivered(_,Y), T).                                             
-
-{observation(delivered(X,Y), T) : amount(X)} 1 :- step(T), holds(lumber_board(X',Y), T).
-
-:- step(T), delivered(Q,T), Q > 1, holds(lumber_board(X,1), T), X > 0.  
-
-:- step(T), holds(lumber_board(X',Y), T), observation(delivered(X,Y), T), X > X'. 
-
-:- step(T), delivered(Q,T), Q > 1, holds(board(140000,1), T).  
-
-:- step(T), holds(board(X',1), T), observation(delivered(X,Y), T), Y >=1, X+X' >140000. 
-
-% :~ holds(lumber_board(M,G), maxTime+1), N=100000*G. [-N@G, M] 
-
-%#maximize {M : holds(lumber_board(M, G), maxTime+1),grade(G)}. 
-
-%observation(delivered(100000,1), 0).
-%observation(delivered(40000,1), 1).
-
-holds(board(X,Y), 0) :- init(board(X,Y)).
-
-holds(board(X+X',Y), T+1) :- step(T), holds(board(X',Y), T), observation(delivered(X,Y),T).
-holds(board(X,Y), T+1)  :- step(T), holds(board(X,Y), T), not delivered(Y, T).                                                
-
-holds(board_cost(X-B), T) :- step(T), X = #sum {Y *10 : holds(board(Y, Q), T), Q >= 1}, holds(paid(B, board), T).
-
-holds(available_fund(X), 0):- init(available_fund(X)). 
-holds(available_fund(0), 0):- not init(available_fund(_)). 
-
-holds(paid(0, board), 0).
-holds(paid(0, shipping), 0).                                              
-
-{occurs(pay(X, board), T) : amount(X)} 1 :-  step(T),   holds(available_fund(Y), T), Y > 0. 
-
-{occurs(pay(X, shipping), T) : amount(X)} 1 :- step(T),   holds(available_fund(Y), T), Y > 0.  
-
-%occurs(pay(50000,shipping),3).
-%occurs(pay(100000,board),3).
-%occurs(pay(20000,board),2).
-
-:- step(T), holds(available_fund(X'), T), #sum{X,Y : occurs(pay(X, Y), T)} > X'.  
-
-:- step(T), occurs(pay(X, shipping), T), holds(board_cost(0), T).  
-
-:- step(T), occurs(pay(X, shipping), T), holds(paid(Y, shipping), T), Y+X > 50000.  
-
-:- step(T), occurs(pay(X, board), T), holds(board_cost(0), T).  
+%%% Example 4 -- 10% windows broken, Seller replace them with diff quality windows (no solar panel requirement satisfied)
+broken_percentage(10) 	  	:- example(4).
+initial_w_available(400) 	:- example(4).
+min_w_quality(0)			:- example(4).
+max_w_quality(2)			:- example(4).
+windows_amount(220)			:- example(4).
+windows_amount(330)			:- example(4).
+init(available_windows(1000,1)) :- example(4).
+init(available_windows(500,2)) :- example(4).
+init(available_windows(0,3)) :- example(4).
 
 
-% :- step(T), occurs(pay(X, board), T), holds(board_cost(Y), T), Y<X.  
+%Windows predicate -> windows(quantity,quality,heating_capacity(?))
+%min_w_quality(0).
+%max_w_quality(4).
 
-ab(1):- step(T), Z = #sum{Y, B : occurs(pay(Y, B), T)}, holds(available_fund(X), T), X < Z.  
+min_heating_capacity(0).
+max_heating_capacity(4).
 
-holds(available_fund(X-Z), T+1) :- step(T), holds(available_fund(X), T), 
-                                                       Z = #sum{Y, B : occurs(pay(Y, B), T)}, X >= Z. 
+%initial_w_available(1000). %Maybe add quality
+initial_w_shipped(0).
+initial_w_delivered(0).
+initial_w_broken(0).
 
-holds(available_fund(X), T+1) :- step(T), holds(available_fund(X), T), 
-                                                       Z = #sum{Y, B : occurs(pay(Y, B), T)}, X < Z. 
-                                                   
-holds(paid(X+Z, Y), T+1) :- step(T), holds(paid(X, Y), T), occurs(pay(Z, Y), T), not ab(1).                                                      
+windows_to_buy(500).
 
-holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} == 0.                                                       
+minimum_quality(1).
+minimum_environmental_quality(2).
 
-holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} > 0, ab(1).                                                       
+%broken_quantity(1000). % For now constant
+%broken_percentage(10). % For now constant
 
-%%
-%%holds(available_fund(X-Y), T+1) :- step(T), holds(available_fund(X), T), Y = #sum{Z, Q : occurs(pay(Z, Q), T)}. 
-%%
-%%holds(available_fund(A), T+1) :- step(T), holds(available_fund(A), T),  #count{X,Y : occurs(pay(X,Y), T)} == 0. 
-%%                                                   
-%%holds(paid(X+Z, Y), T+1) :- step(T), holds(paid(X, Y), T), occurs(pay(Z, Y), T).                                                      
-%%
-%%holds(paid(X, Y), T+1) :- step(T),  holds(paid(X, Y), T),  #count{X' : occurs(pay(X',Y), T)} == 0.                                                     
-                                               
-% C1: L  responsible_for    board(144K, Q) , 1 <= Q  when  by_week 4    
-% C2: L  responsible_for    delivered(144K, Q) , 1 <= Q  when  by_week 4  
-% C3: H  responsible_for    payment(122K, board)  when  by_week 4    
-% C4: H  responsible_for    exists(X), X >= 50K, payment(X, shipping)  when  by_week 4   
+%windows_amount(50).
+%windows_amount(100).
+%windows_amount(150).
+%windows_amount(220).
+%windows_amount(330).
+%windows_amount(500).
+%windows_amount(550).
+%windows_amount(500).
+%windows_amount(550).
 
-clause(c1, lumber, phi_1, by(4)). 
-clause(c2, lumber, phi_2, by(4)). 
-clause(c3, homes, phi_3, by(4)). 
-clause(c4, homes, phi_4, by(4)).  
-
-%%% condition whether clause 1 is satisfied 
-
-holds(phi_1, T) :- step(T), #sum{X,Q,T' : observation(delivered(X, Q), T'), Q>=1, T>=T'} >= 140000.  
-
-%%% condition whether clause 2 is satisfied 
-
-holds(phi_2, T) :- step(T), holds(board(140000, 1), T).  
-
-replacement(X,Q) :- 
-	step(T), not holds(board(140000, 1), T), 
-	holds(board(X,Q), T), Q>1,X>0,  
-	#sum{X1,Q1 : holds(board(X1, Q1), T), Q1>=1} >= 140000.  
-
-holds(phi_2, T) :-  step(T), not holds(board(140000, 1), T), 
-	#sum{X,Q : holds(board(X, Q), T), Q>=1} >= 140000.  
+%initial_available_windows(10,Q1..Q2,C1..C2) :- min_w_quality(Q1), max_w_quality(Q2), min_heating_capacity(C1), max_heating_capacity(C2).
 
 
-%%% paying the full contract 
+windows_cost(10). %Add quality dependance?
+shipping_cost(50).
 
-holds(phi_3, T) :- step(T), holds(paid(120000, board), T).  
+initial_fund_available(200000).
+initial_fund_spent(0).
 
-%%% paying as needed 
+money_amount(100).
+money_amount(500).
+money_amount(1000).
+money_amount(1500).
+money_amount(2000).
+money_amount(3500).
+money_amount(4500).
+money_amount(5000).
+money_amount(5500).
 
-holds(phi_3, T) :- step(T), holds(board_cost(0), T). 
 
-%%% paying the full contract for shipping 
+%%%%%DOMAIN
 
-holds(phi_4, T) :- step(T), holds(paid(50000, shipping), T).  
+%Initialization
 
-%%% satisfaction of clauses 
+%%%%%PREDICATES DEFINITIONS -- INSTANCE'S INDEPENDENT
+%Windows predicate -> windows(quantity,quality,heating_capacity(?))
+windows_quality(Q1..Q2) :- min_w_quality(Q1), max_w_quality(Q2).
+%windows_heating_capacity(C1..C2) :- min_heating_capacity(C1), max_heating_capacity(C2).
 
-satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, holds(F, T). 
+#const maxTime=4.
 
-not_satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, not holds(F, T). 
-%%% 
-%%
-%%not_ok(c1) :- not satisfies(c1,  maxTime). 
-%%not_ok(c2) :- not satisfies(c2, maxTime). 
-%%not_ok(c3) :- not satisfies(c3, maxTime). 
-%%not_ok(c4) :- not satisfies(c4, maxTime). 
+step(0..maxTime).
 
+init(available_fund(I))      :- initial_fund_available(I).
+init(spent_fund(I,windows))  :- initial_fund_spent(I).
+init(spent_fund(I,shipping)) :- initial_fund_spent(I).
+
+%init(available_windows(I,Q1..Q2)) :- min_w_quality(Q1), max_w_quality(Q2), initial_w_available(I).
+init(shipped_windows(I,Q1..Q2))   :- min_w_quality(Q1), max_w_quality(Q2), initial_w_shipped(I). %At the momement single receiver 
+init(delivered_windows(I,Q1..Q2)) :- min_w_quality(Q1), max_w_quality(Q2), initial_w_delivered(I). %At the momement single receiver 
+init(broken_windows(I,Q1..Q2))    :- min_w_quality(Q1), max_w_quality(Q2), initial_w_broken(I). %At the momement single receiver 
+
+%%%Rules
+
+%Amount after transactions management
+	%Assume complete description --holds(lumber_board(0,G), 0)  :-  grade(G), not assume(lumber_board(_,G)).
+holds(available_windows(X,Q), 0) :-  init(available_windows(X,Q)).
+holds(shipped_windows(X,Q), 0)   :-  init(shipped_windows(X,Q)).
+holds(delivered_windows(X,Q), 0) :-  init(delivered_windows(X,Q)).
+holds(broken_windows(X,Q), 0)    :-  init(broken_windows(X,Q)).
+
+holds(available_fund(X), 0) :-  init(available_fund(X)).
+holds(spent_fund(X,T), 0)   :-  init(spent_fund(X,T)).
+
+
+%Actually delivered windows -- we assume the difference is broken so not in available either
+holds(available_windows(X-Z,Q), T+1)  :-  step(T), holds(available_windows(X,Q), T), observation(shipped(Z,Q),T).
+holds(available_windows(X  ,Q), T+1)  :-  step(T), holds(available_windows(X,Q), T), not observation(shipped(_,Q),T).
+
+holds(shipped_windows(X+Z,Q), T+1)    :-  step(T), holds(shipped_windows(X,Q), T), observation(shipped(Z,Q),T).
+holds(shipped_windows(X  ,Q), T+1)    :-  step(T), holds(shipped_windows(X,Q), T), not observation(shipped(_,Q),T).
+
+holds(delivered_windows(X+Z,Q), T+1)  :-  step(T), holds(delivered_windows(X,Q), T), observation(delivered(Z,Q),T).
+holds(delivered_windows(X  ,Q), T+1)  :-  step(T), holds(delivered_windows(X,Q), T), not observation(delivered(_,Q),T).
+
+
+holds(broken_windows(X+(S-D),Q), T+1) :-  step(T), holds(broken_windows(X,Q), T), observation(shipped(S,Q),T), observation(delivered(D,Q),T).
+holds(broken_windows(X      ,Q), T+1) :-  step(T), holds(broken_windows(X,Q), T), not observation(shipped(_,Q),T).
+holds(broken_windows(X      ,Q), T+1) :-  step(T), holds(broken_windows(X,Q), T), not observation(delivered(_,Q),T).
+
+
+%holds(needed(X),0) :- windows_to_buy(X).
+%holds(needed(X'),T+1) :- step(T), step(T+1), observation(shipped(S,_),T), holds(needed(X),T), X'=X-S.
+
+%Delivered generation
+%observation(shipped(500,2), 0).
+% At the first step, buy exactly what you need
+observation(shipped(X,Q), 0):- windows_to_buy(X), minimum_environmental_quality(Q), holds(available_windows(X',Q),0), X'>=X.
+% At the following time steps, buy what you need to make up for any issues with the previous deliveries
+1{ observation(shipped(B-Y,Q), T):windows_quality(Q), minimum_quality(MQ), Q >= MQ, holds(available_windows(A,Q),0), A>=B-Y }1 :- step(T), Y = #sum{X,Q : observation(delivered(X,Q), T'), step(T'), T'<T}, windows_to_buy(B), Y<B.
+:- step(T), holds(available_windows(X1,Q), T), observation(shipped(X2,Q), T), X2 > X1.
+% only one shipment at a time
+:- step(T), observation(shipped(X,Q), T), observation(shipped(X',Q'), T), X!=X'.
+:- step(T), observation(shipped(X,Q), T), observation(shipped(X',Q'), T), Q!=Q'.
+
+%observation(delivered(S-B,Q),T) :- step(T), observation(shipped(S,Y), T), broken_quantity(B).
+observation(delivered(S-((S/100)*B),Q),T) :- step(T), observation(shipped(S,Q), T), broken_percentage(B).
+
+%Basic Constraints
+%:- step(T), T > 0, observation(shipped(X1,Q),T), holds(available_windows(I,Q), T), init(available_windows(I,Q)). %Impossible that initial availability is the same if delivered
+%:- step(T), #count{windows_quality(Q), windows_amount(X): observation(shipped(X,Q),T)} > 1.
+
+%Payment Management
+{observation(paid(X,  windows),	T) : money_amount(X)} 1 :- step(T).
+:- step(T), observation(paid(X,  windows),	T), holds(available_fund(Y), T), Y < X.
+
+{observation(paid(X, shipping), T) : money_amount(X)} 1 :- step(T).
+:- step(T), observation(paid(X,  shipping),	T), holds(available_fund(Y), T), Y < X.
+
+holds(available_fund(A-P), T+1)	:-  step(T), holds(available_fund(A), T), P = #sum{M : observation(paid(M,_), T)}.
+holds(available_fund(A  ), T+1)	:-  step(T), holds(available_fund(A), T), not observation(paid(_,_), T).
+
+
+holds(spent_fund(S+P,Y), T+1)	:-	step(T), holds(spent_fund(S,Y), T), observation(paid(P,Y), T).
+holds(spent_fund(S  ,Y), T+1)	:-	step(T), holds(spent_fund(S,Y), T), not observation(paid(_,Y), T).
+
+
+%%%CLAUSES
+
+% S: Seller
+% B: Buyer
+
+% C1: S responsible_for		shipped(500,Q), MQ <= Q								when	by_week 4 (between T1 and T2) -- We are not sure on how many windows will break
+% C2: S	responsible_for		delivered(500,Q), MQ <= Q							when	by_week 4 (between T1 and T2) -- This enforces the right delivery
+% C3: B	responsible_for		paid(windows_needed*windows_cost)  				 	when  	by_week 4
+% C4: B	responsible_for		exists(X), X >= shipping_cost, paid(X, shipping)  	when  	by_week 4
+
+% C5: S responsible_for		delivered(500,Q), ENV_Q <= Q						when	by_week 4 (between T1 and T2) -- For the solar panel requirement
+
+
+clause(c1, seller,	phi_1, by(4)).
+clause(c1_mono, seller,	phi_1_mono, by(4)). %To enforce mono quality if possible
+clause(c2, seller,	phi_2, by(4)).
+clause(c2_mono, seller,	phi_2_mono, by(4)). %To enforce mono quality if possible
+clause(c3, buyer,	phi_3, by(4)).
+clause(c4, buyer,	phi_4, by(4)).
+
+clause(c5, seller,	phi_5, by(4)).
+
+%New Constraint -- impossibile to  have total received windows different from total requested windows
+:- Y = #sum{X,Q : holds(delivered_windows(X,Q), maxTime+1)}, Y != B, windows_to_buy(B).
+
+
+%%% CLAUSE 1 -- PHI 1 -- Different encoding are possible swithcing between observation and hold
+
+%% Multi Quality
+
+holds(phi_1, T) :- step(T), Y = #sum{X : holds(shipped_windows(X,Q), T), windows_quality(Q)}, Y >= B, windows_to_buy(B).
+%holds(phi_1, T) :- step(T), Y = #sum{X,Q,T1 : observation(shipped(X, Q), T1), Q>=MQ, T>=T1}, Y >= B, windows_to_buy(B), minimum_quality(MQ).
+
+%%% Mono Quality -- we add this so that the windows are all the same quality if possible -- only activated when the previous is
+holds(phi_1_mono, T) :- step(T), holds(shipped_windows(X,Q), T), X >= B, windows_to_buy(B).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% CLAUSE 2 -- PHI 2 -- Different encoding are possible swithcing between observation and hold
+
+%% Multi Quality
+holds(phi_2, T) :- step(T), Y = #sum{X : holds(delivered_windows(X,Q), T), windows_quality(Q)}, Y >= B, windows_to_buy(B).
+
+%%% Mono Quality -- we add this so that the windows are all the same quality if possible -- only activated when the previous is
+holds(phi_2_mono, T) :- step(T), holds(delivered_windows(X,Q), T), X >= B, windows_to_buy(B).
+multi_quality_delivered :- not holds(phi_2_mono,_).
+%%% Prints the windows distribution
+final_multi_distribution(Y,Q) :- multi_quality_delivered, holds(delivered_windows(Y,Q), maxTime+1), Y > 0.
+final_mono_distribution(Y,Q)  :- not multi_quality_delivered, holds(delivered_windows(Y,Q), maxTime+1), Y >= B, windows_to_buy(B).
+
+
+%holds(phi_2, T) :- step(T), Y = #sum{X,Q,T1 : observation(delivered(X, Q), T1), Q>=MQ, T>=T1}, Y >= B, windows_to_buy(B), minimum_quality(MQ).
 %
-%ok(c1) :- satisfies(c1,  maxTime). 
-%ok(c2) :- satisfies(c2, maxTime). 
-%ok(c3) :- satisfies(c3, maxTime). 
-%ok(c4) :- satisfies(c4, maxTime). 
+%%% Mono Quality -- we add this so that the windows are all the same quality if possible -- only activated when the previous is
+%holds(phi_2_mono, T) :- step(T), holds(delivered_windows(X, Q), T), Q>=MQ, X >= B, windows_to_buy(B), minimum_quality(MQ), holds(phi_2, T).
+%
+%%%% Prints the windows distribution
+%replacement(X,Q,T) :- step(T), holds(phi_2, T), not holds(phi_2_mono, T),
+%					observation(delivered(X, Q), T1), T >= T1.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- 
+
+%%% CLAUSE 3 -- PHI 3
+
+%% paying the full contract
+
+% Payment independet from delivery status
+holds(phi_3, T) :- step(T), holds(spent_fund(P,windows), T), P >= B*C, windows_to_buy(B), windows_cost(C).
+% Only delivered windows version
+%holds(phi_3, T) :- step(T), holds(spent_fund(P,windows), T), P >= X*C, holds(delivered_windows(X,Q),maxTime), windows_cost(C), minimum_quality(MQ)
+
+%%% paying as needed -- REMOVED For now because we allow delayed payment (needed only before week 4)
+%holds(phi_3, T) :- step(T), holds(board_cost(0), T).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% CLAUSE 4 -- PHI 4
+
+%For now is just a single shipping cost, we can make it dependent of every single transaction
+holds(phi_4, T) :- step(T), holds(spent_fund(P,shipping), T), shipping_cost(C), P >= C.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% CLAUSE 5 -- PHI 5
+
+holds(phi_5, T) :- step(T), Y = #sum{X,Q,T1 : observation(delivered(X, Q), T1), Q>=ENV_Q, T>=T1}, Y >= B, windows_to_buy(B), minimum_environmental_quality(ENV_Q).
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% satisfaction of clauses
+
+satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, holds(F, T).
+not_satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, not holds(F, T).
+
 good(N) :- N = #count{C : satisfies(C, maxTime)}.
- 
- #maximize {N : good(N)}. 
+#maximize {N : good(N)}.
+%#maximize {Z : holds(available_fund(Z), maxTime+1)}.
+
 
 %%%
 
-%#maximize {Z : holds(available_fund(Z), maxTime+1)}. 
+%#maximize {Z : holds(available_fund(Z), maxTime+1)}.
 
 %*
 #show.
 
-% #show holds/2. 
-#show occurs/2. 
-#show observation/2. 
+% #show holds/2.
+#show occurs/2.
+#show observation/2.
 #show received(board(X,Y), T) : observation(delivered(X,Y), T).
-#show satisfies(X) : satisfies(X, maxTime). 
-#show not_satisfies(X) : not_satisfies(X, maxTime).  
-#show replacement/2. 
- #show good/1. 
+#show satisfies(X) : satisfies(X, maxTime).
+#show not_satisfies(X) : not_satisfies(X, maxTime).
+#show replacement/2.
+ #show good/1.
+*%
+
+
+
+holds(sat("sufficient_material_for_building"), T):- step(T), holds(phi_1,T).
+-holds(sat("sufficient_material_for_building"), T):- step(T), not holds(phi_1,T).
+
+holds(sat("material_ready_for_building"), T):- step(T), holds(phi_2,T). %Name changed from "material_safe_for_building" to "material_ready_for_building"
+-holds(sat("material_ready_for_building"), T):- step(T), not holds(phi_2,T). %Name changed from "material_safe_for_building" to "material_ready_for_building"
+
+holds(sat("material_sufficiently_durable"), T):- step(T), holds(phi_2,T).
+-holds(sat("material_sufficiently_durable"), T):- step(T), not holds(phi_2,T).
+
+
+holds(sat("promptly_send_payment"),		T):- step(T), holds(phi_3,T).
+-holds(sat("promptly_send_payment"), 	T):- step(T), not holds(phi_3,T).
+
+
+holds(sat("acceptable_shipping_cost"),	T):- step(T), holds(phi_4,T).
+-holds(sat("acceptable_shipping_cost"), T):- step(T), not holds(phi_4,T).
+
+%%%%% Newly introduced requirement
+holds(sat("solar_panel_requirement"), T):- step(T), holds(phi_5,T).
+-holds(sat("solar_panel_requirement"), T):- step(T), not holds(phi_5,T).
+
+
+%%%%%%%%% SHOWS and DEBUG
+
+total(A) :- A = #sum{X,Q,T1 : observation(delivered(X, Q), T1), Q>=ENV_Q, T>=T1}, T = maxTime, minimum_environmental_quality(ENV_Q).
+final_sat(X) :- holds(sat(X),_).
+aval_w(X,Y,T) :- holds(available_windows(X,Y), T).
+ship_w(X,Y,T) :- holds(shipped_windows(X,Y), T).
+obs_ship(X,Y,T) :- observation(shipped(X,Y), T).
+
+obs_payment(X,Y,T) :- observation(paid(X, Y),	T).
+aval_fund(A,T) :- holds(available_fund(A), T).
+spent_fund(S,Y,T) :- holds(spent_fund(S,Y), T).
+
+%%%% Prints the windows distribution
+replacement(X,Q,T) :- step(T), T>0, observation(shipped(X, Q), T).
+
+
+%*
+#show final_sat/1.
+#show final_mono_distribution/2.
+#show final_multi_distribution/2.
+%#show replacement/3.
+%#show total/1.
+%#show aval_w/3.
+%#show ship_w/3.
+%#show obs_ship/3.
+%#show obs_payment/3.
+%#show aval_fund/2.
+%#show spent_fund/3.
+%holds(sat("mono1"), T):- step(T), holds(phi_1_mono,T).
+%-holds(sat("mono1"), T):- step(T), not holds(phi_1_mono,T).
+%holds(sat("mono2"), T):- step(T), holds(phi_2_mono,T).
+%-holds(sat("mono2"), T):- step(T), not holds(phi_2_mono,T).
 *%
 % To reduce the output, manually ground the following rule for concerns C that you are interested in
 
@@ -1366,6 +1542,7 @@ relevantToFunc("cpsf:Policy","cpsf:bc2")                :- concern("cpsf:Policy"
 relevantToFunc("cpsf:Performance","cpsf:bc2")     :- concern("cpsf:Performance").
 relevantToFunc("cpsf:Reliability","cpsf:bc2")          :- concern("cpsf:Reliability").
 relevantToFunc("cpsf:Safety","cpsf:bc2")               :- concern("cpsf:Safety").
+relevantToFunc("cpsf:Environment","cpsf:bc2")               :- concern("cpsf:Environment").
 
 % Quick workaround since I forgot to include descriptions for the new properties
 descr(P,P) :- atomic_statement(P,A), not input(P,"rdfs:comment",_).
@@ -1397,26 +1574,23 @@ holds(impacted(C,F,neg),S) :-
 	addresses(A,C,F),
 	not private_part(_,A).
 
-% Link the internal names of clauses to their ontology names
-holds(sat("sufficient_material_for_building"), T):- step(T), holds(phi_1,T).
--holds(sat("sufficient_material_for_building"), T):- step(T), not holds(phi_1,T).
-
-holds(sat("material_safe_for_building"), T):- step(T), holds(phi_2,T).
--holds(sat("material_safe_for_building"), T):- step(T), not holds(phi_2,T).
-
-holds(sat("material_sufficiently_durable"), T):- step(T), holds(phi_2,T).
--holds(sat("material_sufficiently_durable"), T):- step(T), not holds(phi_2,T).
-
-holds(sat("acceptable_shipping_cost"), T):- step(T), holds(phi_3,T).
--holds(sat("acceptable_shipping_cost"), T):- step(T), not holds(phi_3,T).
-
-holds(sat("promptly_send_payment"), T):- step(T), holds(phi_4,T).
--holds(sat("promptly_send_payment"), T):- step(T), not holds(phi_4,T).
+%% Link the internal names of clauses to their ontology names
+%holds(sat("sufficient_material_for_building"), T):- step(T), holds(phi_1,T).
+%-holds(sat("sufficient_material_for_building"), T):- step(T), not holds(phi_1,T).
+%
+%holds(sat("material_safe_for_building"), T):- step(T), holds(phi_2,T).
+%-holds(sat("material_safe_for_building"), T):- step(T), not holds(phi_2,T).
+%
+%holds(sat("material_sufficiently_durable"), T):- step(T), holds(phi_2,T).
+%-holds(sat("material_sufficiently_durable"), T):- step(T), not holds(phi_2,T).
+%
+%holds(sat("acceptable_shipping_cost"), T):- step(T), holds(phi_3,T).
+%-holds(sat("acceptable_shipping_cost"), T):- step(T), not holds(phi_3,T).
+%
+%holds(sat("promptly_send_payment"), T):- step(T), holds(phi_4,T).
+%-holds(sat("promptly_send_payment"), T):- step(T), not holds(phi_4,T).
 % ------ Output Interface ------
 
 descr("using_basic_input1","Basic type of input device 1 is in use").
 event_descr(recipient_rejects,"recipient rejects input").
 action_descr(patch(sam),"patch the SAM").
-
-
-output(A,action,"-",S) :- step(S), occurs(A,S).

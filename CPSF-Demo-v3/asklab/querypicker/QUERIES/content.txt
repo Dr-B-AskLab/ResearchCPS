@@ -28,6 +28,31 @@
 %
 
 *LBL
+<html><u><font color='red'> Supply Chain Windows Supply scenario</font></u></html>
+*QUERY
+On-time delivery and no damaged windows
+EX7-windowsSupply
+clingo
+FULL-supplychain-1.txt
+*QUERY
+10% windows broken, must be replaced. Same-quality windows available
+EX7-windowsSupply
+clingo
+FULL-supplychain-2.txt
+*QUERY
+10% windows broken, must be replaced. Same-quality windows not available. Higher-quality windows and non-environmentally-friendly windows available
+EX7-windowsSupply
+clingo
+FULL-supplychain-3.txt
+*QUERY
+10% windows broken, must be replaced. Only non-environmentally-friendly windows available
+EX7-windowsSupply
+clingo
+FULL-supplychain-4.txt
+*LBL
+ 
+
+*LBL
 <html><u><font color='red'> Supply Chain Homebuilder scenario: evaluation use cases</font></u></html>
 *QUERY
 Only two deliveries made: all clauses violated

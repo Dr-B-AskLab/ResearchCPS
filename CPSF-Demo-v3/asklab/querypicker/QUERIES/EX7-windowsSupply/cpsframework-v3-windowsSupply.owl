@@ -194,12 +194,12 @@
   <addProperty rdf:resource="#Material_Sufficiently_Durable"/>
 </Clause>
 
-<Clause rdf:about="#C4">
+<Clause rdf:about="#C3">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   <addProperty rdf:resource="#Promptly_Send_Payment"/>
 </Clause>
 
-<Clause rdf:about="#C3">
+<Clause rdf:about="#C4">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   <addProperty rdf:resource="#Acceptable_Shipping_Cost"/>
 </Clause>

@@ -194,14 +194,14 @@ holds(spent_fund(S  ,Y), T+1)	:-	step(T), holds(spent_fund(S,Y), T), not observa
 % C5: S responsible_for		delivered(500,Q), ENV_Q <= Q						when	by_week 4 (between T1 and T2) -- For the solar panel requirement
 
 
-clause(c1, seller,	phi_1, by(4)).
-clause(c1_mono, seller,	phi_1_mono, by(4)). %To enforce mono quality if possible
-clause(c2, seller,	phi_2, by(4)).
-clause(c2_mono, seller,	phi_2_mono, by(4)). %To enforce mono quality if possible
-clause(c3, buyer,	phi_3, by(4)).
-clause(c4, buyer,	phi_4, by(4)).
+clause(c1, seller,	phi_1, by(3,4)).
+clause(c1_mono, seller,	phi_1_mono, by(3,4)). %To enforce mono quality if possible
+clause(c2, seller,	phi_2, by(3,4)).
+clause(c2_mono, seller,	phi_2_mono, by(3,4)). %To enforce mono quality if possible
+clause(c3, buyer,	phi_3, by(3,4)).
+clause(c4, buyer,	phi_4, by(3,4)).
 
-clause(c5, seller,	phi_5, by(4)).
+clause(c5, seller,	phi_5, by(3,4)).
 
 %New Constraint -- impossibile to  have total received windows different from total requested windows
 :- Y = #sum{X,Q : holds(delivered_windows(X,Q), maxTime+1)}, Y != B, windows_to_buy(B).
@@ -278,6 +278,8 @@ holds(phi_5, T) :- step(T), Y = #sum{X,Q,T1 : observation(delivered(X, Q), T1), 
 
 satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, holds(F, T).
 not_satisfies(C, T) :- step(T), clause(C, _, F, by(N)), T<=N, not holds(F, T).
+satisfies(C, T) :- step(T), clause(C, _, F, by(M,N)), M<=T, T<=N, holds(F, T).
+not_satisfies(C, T) :- step(T), clause(C, _, F, by(M,N)), M<=T, T<=N, not holds(F, T).
 
 good(N) :- N = #count{C : satisfies(C, maxTime)}.
 #maximize {N : good(N)}.

@@ -1,0 +1,46 @@
+* Contract
+c1: seller shall ship 500 windows to arrive between t1 and t2
+	Requirements impacted by this clause:
+		sufficient_material_for_building
+c2: seller shall deliver 500 windows to arrive between t1 and t2
+	Requirements impacted by this clause:
+		material_ready_for_building
+		material_sufficiently_durable
+c3: buyer shall promptly pay for the agreed-upon cost of all windows delivered in good condition
+	Requirements impacted by this clause:
+		promptly_send_payment
+c4: buyer shall promptly pay for the agree-upon shipping costs
+	Requirements impacted by this clause:
+		acceptable_shipping_cost
+c5: seller shall provide windows of quality 2 or greater (rationale: suitability for heating through solar panels)
+	Requirements impacted by this clause:
+		solar_panel_requirement
+
+* Concerns addressed by the requirements
+sufficient_material_for_building
+	TimeToMarket
+material_ready_for_building
+	Safety
+	Reliability
+material_sufficiently_durable
+	Performance
+promptly_send_payment
+	Policy
+acceptable_shipping_cost
+	Cost
+solar_panel_requirement
+	Environment
+
+* Scenarios
+- 500 windows of quality 2 are shipped and received in good condition between time t1 and time t2
+
+- 500 windows of quality 2 are shipped. 10% of the windows arrive broken and must be replaced. Same-quality windows are available for a replacement.
+Solution: seller ships an additional 50 windows of quality 2
+
+- 500 windows of quality 2 are shipped. 10% of the windows arrive broken and must be replaced. Same-quality windows not available. Higher-quality windows and non-environmentally friendly windows available for a replacement.
+Solution: seller ships an additional 50 windows of quality 3
+Note: quality 3 windows ensure that solar_panel_requirement is still satisfied
+ 
+- 500 windows of quality 2 are shipped. 10% of the windows arrive broken and must be replaced. Only quality 1 windows are available for a replacement.
+Solution: seller ships an additional 50 windows of quality 1
+Note: quality 1 fail to satisfy the solar_panel_requirement. The environment concern is not satisfied. The windows will eventually need to be replaced in order to satisfy the environment concern.

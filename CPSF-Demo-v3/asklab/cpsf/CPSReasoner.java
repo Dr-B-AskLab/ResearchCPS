@@ -9,6 +9,9 @@ import java.util.Vector;
 public class CPSReasoner
 {	static final String versionFile="./version.txt";
 
+	#static final String CLINGODIR="clingo-4.4.0/";
+	static final String CLINGODIR="clingo/";
+
 	/* Available ASP solvers */
 	public static final int SLVR_CLINGO=1;
 	public static final int SLVR_DLV=2;
@@ -305,11 +308,13 @@ System.out.println("HERE");
 	{	String cmd;
 
 		//cmd="./clingo-4.4.0/";
-		cmd=pkgPath("clingo-4.4.0/");
+		cmd=pkgPath(CLINGODIR);
 		if (isWindows())
 			cmd+="clingo.exe";
-		else if (isMacOSX())
+		else if (isMacOSXIntel())
 			cmd+="clingo-macosx";
+		else if (isMacOSXSilicon())
+			cmd+="clingo-macosx-silicon";
 		else
 			cmd+="clingo-linux-x86";
 		cmd+=" "+aspFile;
@@ -321,11 +326,13 @@ System.out.println("HERE");
 	{	String cmd;
 
 		//cmd="./clingo-4.4.0/";
-		cmd=pkgPath("clingo-4.4.0/");
+		cmd=pkgPath(CLINGODIR);
 		if (isWindows())
 			cmd+="clingo.exe";
-		else if (isMacOSX())
+		else if (isMacOSXIntel())
 			cmd+="clingo-macosx";
+		else if (isMacOSXSilicon())
+			cmd+="clingo-macosx-silicon";
 		else
 			cmd+="clingo-linux-x86";
 		cmd+=" 0 "+aspFile;
@@ -340,8 +347,10 @@ System.out.println("HERE");
 		cmd=pkgPath("dlv/");
 		if (isWindows())
 			cmd+="dlv.mingw.exe";
-		else if (isMacOSX())
+		else if (isMacOSXIntel())
 			cmd+="dlv-macosx";
+		else if (isMacOSXSilicon())
+			cmd+="dlv-macosx-silicon";
 		else
 			cmd+="dlv";
 		cmd+=" -n=1 "+aspFile;
@@ -356,8 +365,10 @@ System.out.println("HERE");
 		cmd=pkgPath("dlv/");
 		if (isWindows())
 			cmd+="dlv.mingw.exe";
-		else if (isMacOSX())
+		else if (isMacOSXIntel())
 			cmd+="dlv-macosx";
+		else if (isMacOSXSilicon())
+			cmd+="dlv-macosx-silicon";
 		else
 			cmd+="dlv";
 //		cmd+=" -n=1 "+aspFile;
@@ -372,8 +383,10 @@ System.out.println("HERE");
 		cmd=pkgPath("mkatoms/");
 		if (isWindows())
 			cmd+="mkatoms.exe";
-		else if (isMacOSX())
+		else if (isMacOSXIntel())
 			cmd+="mkatoms-macosx";
+		else if (isMacOSXSilicon())
+			cmd+="mkatoms-macosx-silicon";
 		else
 			cmd+="mkatoms-linux-x86";
 
@@ -386,9 +399,20 @@ System.out.println("HERE");
 		return(OS.startsWith("Windows"));
 	}
 
-	static boolean isMacOSX()
+	static boolean isMacOSXIntel()
 	{	String OS = System.getProperty("os.name");
-		return(OS.startsWith("Mac"));
+		String arch = System.getProperty("os.arch");
+		System.out.println("os="+OS);
+		System.out.println("arch="+OS);
+		return(OS.startsWith("Mac") && !arch.equals("aarch64"));
+	}
+
+	static boolean isMacOSXSilicon()
+	{	String OS = System.getProperty("os.name");
+		String arch = System.getProperty("os.arch");
+		System.out.println("os="+OS);
+		System.out.println("arch="+OS);
+		return(OS.startsWith("Mac") && arch.equals("aarch64"));
 	}
 
 	static String readFile(String s) throws FileNotFoundException, IOException

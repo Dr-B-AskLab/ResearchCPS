@@ -9,7 +9,7 @@ import java.util.Vector;
 public class CPSReasoner
 {	static final String versionFile="./version.txt";
 
-	#static final String CLINGODIR="clingo-4.4.0/";
+	//static final String CLINGODIR="clingo-4.4.0/";
 	static final String CLINGODIR="clingo/";
 
 	/* Available ASP solvers */

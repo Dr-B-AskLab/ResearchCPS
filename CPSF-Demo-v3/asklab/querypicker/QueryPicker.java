@@ -328,7 +328,7 @@ public class QueryPicker
 
 		//make sure the program exits when the frame closes
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		guiFrame.setTitle("Query Picker v3 [CPSReasoner "+CPSReasoner.version()+"]");
+		guiFrame.setTitle("Query Picker v3 / CPSReasoner "+CPSReasoner.version());
 		guiFrame.setSize(1200,800);
 
 		//This will center the JFrame in the middle of the screen
@@ -348,7 +348,11 @@ public class QueryPicker
 		//stays the same whether or not the string is shown.
 		progressBar.setString(" ");
 		progressBar.setStringPainted(true);
-		Border bGreyLine = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true);
+		progressBar.setOpaque(true);
+		// Solve issue with Macs not displaying animated progress bar
+		UIManager.put("ProgressBarUI","javax.swing.plaf.metal.MetalProgressBarUI" );
+		Border bGreyLine = BorderFactory.
+		createLineBorder(Color.LIGHT_GRAY, 1, true);
 		progressBar.setBorder(bGreyLine);
 		//progressBar.setBackground (new Color (0, 0, 0, 0));
 		//JComboBox solverL = new JComboBox(solverStrings);

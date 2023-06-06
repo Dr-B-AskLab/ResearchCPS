@@ -230,6 +230,9 @@ public class ReasonerUI
 		//stays the same whether or not the string is shown.
 		progressBar.setString(" ");
 		progressBar.setStringPainted(true);
+		progressBar.setOpaque(true);
+		// Solve issue with Macs not displaying animated progress bar
+		UIManager.put("ProgressBarUI","javax.swing.plaf.metal.MetalProgressBarUI" );
 		Border bGreyLine = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true);
 		progressBar.setBorder(bGreyLine);
 		//progressBar.setBackground (new Color (0, 0, 0, 0));
